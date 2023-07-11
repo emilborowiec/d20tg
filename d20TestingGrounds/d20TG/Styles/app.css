@@ -5,3 +5,13 @@
 #blazor-error-ui {
     display: none;
 }
+
+h1:focus {
+    outline: 0px;
+    animation: yellowFade 1s forwards;
+}
+
+@keyframes yellowFade {
+    from { background: lightYellow; }
+    to   { background: white; }
+}
