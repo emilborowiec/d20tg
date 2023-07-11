@@ -1,0 +1,12 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+<h3>Attackers</h3>
+
+@if (State != null)
+{
+    <AttackerBuild State="@State[0]" />
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public AttackerBuildState[]? State { get; set; }
+}

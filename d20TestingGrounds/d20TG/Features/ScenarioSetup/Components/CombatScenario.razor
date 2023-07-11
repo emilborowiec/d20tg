@@ -1,0 +1,13 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+<h2 class="text-4xl">CombatScenario</h2>
+
+@if (State != null)
+{
+    <Defenders State="@State.defenderBuildStates" />
+    <Attackers State="@State.attackerBuildStates" />
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public CombatScenarioState? State { get; set; }
+}

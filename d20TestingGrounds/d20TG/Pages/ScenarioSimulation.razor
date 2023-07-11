@@ -1,0 +1,30 @@
+﻿@using d20TG.Features.ScenarioSetup.Services
+@using d20TG.Features.ScenarioSetup.State
+@attribute [Route(MyRoutes.ScenarioSimulationRoute)]
+@inject ICombatScenarioRepository ScenarioRepository
+
+<h3>ScenarioSimulation</h3>
+
+@if (_scenarioState != null)
+{
+    
+}
+
+
+@code {
+    [Parameter]
+    public string? ScenarioId { get; set; }
+
+    private CombatScenarioState? _scenarioState;
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (ScenarioId != null)
+        {
+            _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId);
+        }
+    }
+
+}

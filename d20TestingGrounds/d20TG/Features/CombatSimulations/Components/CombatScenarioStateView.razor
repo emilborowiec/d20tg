@@ -1,0 +1,19 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+
+<h3>CombatScenarioStateView</h3>
+
+@if (ScenarioState != null)
+{
+    <p>Armor class: @ScenarioState.defenderBuildStates[0].armorClass</p>
+    <p>Hit points: @ScenarioState.defenderBuildStates[0].hitPoints</p>
+
+    <p>Attack bonus: @ScenarioState.attackerBuildStates[0].attackBonus</p>
+    <p>Damage: @ScenarioState.attackerBuildStates[0].damageDiceState.diceCount d @ScenarioState.attackerBuildStates[0].damageDiceState.diceType + @ScenarioState.attackerBuildStates[0].damageBonus</p>
+}
+
+
+
+@code {
+    [Parameter, EditorRequired]
+    public CombatScenarioState? ScenarioState { get; set; }
+}
