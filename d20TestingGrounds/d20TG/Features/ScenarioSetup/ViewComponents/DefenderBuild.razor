@@ -1,0 +1,40 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+@using d20TG.Features.ScenarioSetup.Services
+
+<h3>DefenderBuild</h3>
+
+@if (State != null)
+{
+    <label>
+        Hit Points
+        <input type="number" min="0" max="1000" value="@State.HitPoints" @onchange="HandleHitPointsChangeAsync"/>
+    </label>
+    <label>
+        Armor Class
+        <input type="number" min="-100" max="100" value="@State.ArmorClass" @onchange="HandleArmorClassChangeAsync"/>
+    </label>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public DefenderBuildState State { get; set; }
+    [Parameter, EditorRequired]
+    public EventCallback<DefenderBuildState> OnDefenderBuildStateChangeCallback { get; set; }
+
+    private async Task HandleHitPointsChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (int.TryParse(eventArgs.Value as string, out var value))
+        {
+            await OnDefenderBuildStateChangeCallback.InvokeAsync(State with { HitPoints = value });
+        }
+    }
+
+    private async Task HandleArmorClassChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (int.TryParse(eventArgs.Value as string, out var value))
+        {
+            await OnDefenderBuildStateChangeCallback.InvokeAsync(State with { ArmorClass = value });
+        }
+    }
+
+}

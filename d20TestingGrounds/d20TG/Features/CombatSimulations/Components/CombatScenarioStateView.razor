@@ -4,16 +4,22 @@
 
 @if (ScenarioState != null)
 {
-    <p>Armor class: @ScenarioState.defenderBuildStates[0].armorClass</p>
-    <p>Hit points: @ScenarioState.defenderBuildStates[0].hitPoints</p>
+    <p>Armor class: @ScenarioState.DefenderBuildStates[0].ArmorClass</p>
+    <p>Hit points: @ScenarioState.DefenderBuildStates[0].HitPoints</p>
 
-    <p>Attack bonus: @ScenarioState.attackerBuildStates[0].attackBonus</p>
-    <p>Damage: @ScenarioState.attackerBuildStates[0].damageDiceState.diceCount d @ScenarioState.attackerBuildStates[0].damageDiceState.diceType + @ScenarioState.attackerBuildStates[0].damageBonus</p>
+    <p>Attack bonus: @ScenarioState.AttackerBuildStates[0].AttackBonus</p>
+    <p>Damage: @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceCount d @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceType + @ScenarioState.AttackerBuildStates[0].DamageBonus</p>
+}
+else
+{
+    <p>nothing to show</p>
 }
 
 
 
 @code {
+
     [Parameter, EditorRequired]
-    public CombatScenarioState? ScenarioState { get; set; }
+    public CombatScenarioState ScenarioState { get; set; }
+
 }

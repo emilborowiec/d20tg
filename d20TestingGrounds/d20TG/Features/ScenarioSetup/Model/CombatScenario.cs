@@ -6,4 +6,9 @@ public class CombatScenario
 {
     public List<DefenderBuild> DefenderBuilds { get; } = new() { new DefenderBuild()};
     public List<AttackerBuild> AttackerBuilds { get; } = new() { new AttackerBuild()};
+
+    public override string ToString()
+    {
+        return $"{AttackerBuilds[0]} : {DefenderBuilds[0]}";
+    }
 }

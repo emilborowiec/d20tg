@@ -1,0 +1,52 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+@using d20TG.Features.ScenarioSetup.Services
+
+<h3>AttackerBuild</h3>
+
+@if (State != null)
+{
+    <label>
+        Attack Bonus
+        <input type="number" min="-100" max="100" value="@State.AttackBonus" @onchange="HandleAttackBonusChangeAsync" />
+    </label>
+    <label>
+        Damage Bonus
+        <input type="number" min="0" max="100" value="@State.DamageBonus" @onchange="HandleDamageBonusChangeAsync" />
+    </label>
+    <DamageDice State="State.DamageDiceState" OnDamageDiceChangedCallback="HandleDamageDiceChangedAsync" />
+}
+else
+{
+    <p>No state provided!</p>
+}
+
+@code {
+
+    [Parameter, EditorRequired]
+    public AttackerBuildState State { get; set; }
+
+    [Parameter, EditorRequired] 
+    public EventCallback<AttackerBuildState> OnAttackerBuildChangeCallback { get; set; }
+
+    private async Task HandleAttackBonusChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (int.TryParse(eventArgs.Value as string, out var value))
+        {
+            await OnAttackerBuildChangeCallback.InvokeAsync(State with { AttackBonus = value });
+        }
+    }
+
+    private async Task HandleDamageBonusChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (int.TryParse(eventArgs.Value as string, out var value))
+        {
+            await OnAttackerBuildChangeCallback.InvokeAsync(State with { DamageBonus = value });
+        }
+    }
+
+    private async Task HandleDamageDiceChangedAsync(DamageDiceState damageDiceState)
+    {
+        await OnAttackerBuildChangeCallback.InvokeAsync(State with { DamageDiceState = damageDiceState});
+    }
+
+}

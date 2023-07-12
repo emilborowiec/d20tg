@@ -5,25 +5,22 @@
 
 <h3>ScenarioSimulation</h3>
 
-@if (_scenarioState != null)
-{
-    
-}
+<CombatScenarioStateView ScenarioState="@_scenarioState" />
 
 
 @code {
     [Parameter]
     public string? ScenarioId { get; set; }
 
-    private CombatScenarioState? _scenarioState;
+    private CombatScenarioState _scenarioState;
     
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        base.OnInitialized();
+        base.OnParametersSet();
 
         if (ScenarioId != null)
         {
-            _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId);
+            _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId) ?? new CombatScenarioState();
         }
     }
 

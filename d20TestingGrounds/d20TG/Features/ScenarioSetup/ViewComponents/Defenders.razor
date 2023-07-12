@@ -1,0 +1,21 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+<h3>Defenders</h3>
+
+@if (State != null)
+{
+    <DefenderBuild State="@State[0]" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChangeAsync" />
+}
+
+@code {
+    [Parameter, EditorRequired] 
+    public DefenderBuildState[]? State { get; set; }
+    
+    [Parameter, EditorRequired]
+    public EventCallback<DefenderBuildState> OnDefenderBuildStateChangeCallback { get; set; }
+
+    private async Task HandleDefenderBuildStateChangeAsync(DefenderBuildState defenderBuildState)
+    {
+        await OnDefenderBuildStateChangeCallback.InvokeAsync(defenderBuildState);
+    }
+
+}

@@ -1,3 +1,3 @@
 ﻿namespace d20TG.Features.ScenarioSetup.State;
 
-public record DefenderBuildState(int armorClass, int hitPoints);
+public readonly record struct DefenderBuildState(int ArmorClass = 0, int HitPoints = 0);

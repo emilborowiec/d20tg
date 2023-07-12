@@ -1,0 +1,32 @@
+﻿@using d20TG.Features.ScenarioSetup.State
+@using d20TG.Features.ScenarioSetup.Utils
+@using d20TG.Features.ScenarioSetup.ViewModels
+<h2 class="text-4xl">CombatScenario</h2>
+
+<Defenders State="@_viewModel.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange" />
+<Attackers State="@_viewModel.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange" />
+
+<button @onclick="HandleRunScenarioClickAsync">Run Scenario</button>
+
+@code {
+    private CombatScenarioViewModel _viewModel = new ();
+    
+    [Parameter, EditorRequired]
+    public EventCallback<CombatScenarioState> OnScenarioSubmittedCallback { get; set; }
+
+    private void HandleDefenderBuildStateChange(DefenderBuildState defenderBuildState)
+    {
+        _viewModel.UpdateDefenderFromState(defenderBuildState);
+    }
+
+    private void HandleAttackerBuildStateChange(AttackerBuildState attackerBuildState)
+    {
+        _viewModel.UpdateAttackerFromState(attackerBuildState);
+    }
+
+    private async Task HandleRunScenarioClickAsync()
+    {
+        await OnScenarioSubmittedCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+    }
+
+}

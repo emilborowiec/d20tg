@@ -16,7 +16,8 @@ public class CombatScenarioService : ICombatScenarioService
 
     public CombatScenarioState GetCurrentState()
     {
-        return _combatScenario.ToState();
+        Console.WriteLine(_combatScenario);
+        return _combatScenario.ToReadOnlyState();
     }
 
     public void SetDamageDiceCount(int value)

@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using d20TG.Features.ScenarioSetup.Services
-@inject ICombatScenarioService ScenarioService
+@using d20TG.Features.ScenarioSetup.State
 @inject ICombatScenarioRepository ScenarioRepository
 @inject IMyNavigationManager MyNavigation
 
@@ -9,15 +9,14 @@
 <div class="p-8">
     <h1 class="text-5xl">D20 Lab</h1>
 
-    <CombatScenario State="@ScenarioService.GetCurrentState()" />
-    <button @onclick="RunScenarioButtonClickCallback">Run Scenario</button>
+    <CombatScenario OnScenarioSubmittedCallback="HandleScenarioSubmitted" />
 </div>
 
 
 @code {
-    private void RunScenarioButtonClickCallback()
+    private void HandleScenarioSubmitted(CombatScenarioState combatScenarioState)
     {
-        var scenarioGuid = ScenarioRepository.SaveScenario(ScenarioService.GetCurrentState());
+        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
         MyNavigation.NavigateToSimulation(scenarioGuid);
     }
 }

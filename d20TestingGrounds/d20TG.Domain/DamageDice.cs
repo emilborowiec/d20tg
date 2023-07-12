@@ -2,7 +2,7 @@
 
 public class DamageDice
 {
-    public DiceType DiceType { get; set; }
+    public DiceType DiceType { get; set; } = DiceType.D6;
     public int DiceCount { get; private set; } = 1;
 
     public void SetDiceCount(int newDiceCount)
@@ -15,6 +15,6 @@ public class DamageDice
 
     public override string ToString()
     {
-        return $"{DiceCount}d{DiceType}";
+        return $"{DiceCount}d{(int)DiceType}";
     }
 }

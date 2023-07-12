@@ -1,0 +1,59 @@
+﻿@using d20TG.Domain
+@using d20TG.Features.ScenarioSetup.Services
+@using d20TG.Features.ScenarioSetup.State
+
+<h4>DamageDice</h4>
+
+@if (State != null)
+{
+    <input type="number" min="1" max="100" value="@State.DiceCount" @onchange="HandleDiceCountChangeAsync"/>
+    <label>
+        d
+        <select @onchange="HandleDiceTypeChangeAsync">
+            @foreach (var value in Enum.GetValues<DiceType>()) {
+                    <option value="@value" selected="@(value == _selectedDiceType)">@value</option>
+                }
+        </select>
+    </label>
+}
+
+@code {
+
+    [Parameter, EditorRequired]
+    public DamageDiceState State { get; set; }
+    
+    [Parameter, EditorRequired]
+    public EventCallback<DamageDiceState> OnDamageDiceChangedCallback { get; set; }
+
+    private DiceType _selectedDiceType;
+
+    protected override void OnParametersSet()
+    {
+        if (State == null)
+        {
+            return;
+        }
+        _selectedDiceType = State.DiceType;
+        
+        base.OnParametersSet();
+    }
+    
+    
+
+    private async Task HandleDiceTypeChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (Enum.TryParse((string?)eventArgs.Value, out DiceType diceType))
+        {
+            await OnDamageDiceChangedCallback.InvokeAsync(State with { DiceType = diceType });
+        }
+    }
+
+    private async Task HandleDiceCountChangeAsync(ChangeEventArgs eventArgs)
+    {
+        if (int.TryParse(eventArgs.Value as string, out var value))
+        {
+            await OnDamageDiceChangedCallback.InvokeAsync(State with { DiceCount = value });
+        }
+    }
+
+}
