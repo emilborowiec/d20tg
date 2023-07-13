@@ -1,5 +1,7 @@
 ﻿@using d20TG.Features.ScenarioSetup.Services
 @using d20TG.Features.ScenarioSetup.State
+@using d20TG.Features.CombatSimulations
+@using d20TG.Domain
 @attribute [Route(MyRoutes.ScenarioSimulationRoute)]
 @inject ICombatScenarioRepository ScenarioRepository
 
@@ -7,12 +9,33 @@
 
 <CombatScenarioStateView ScenarioState="@_scenarioState" />
 
+<table>
+    <thead>
+    <tr>Course of Combat</tr>
+    </thead>
+        @foreach (var round in _rounds)
+        {
+            <tbody>
+                @foreach (var turn in round.Turns)
+                {
+                    <tr>
+                        <td rowspan="@round.Turns.Count">@round.RoundNumber+1</td>
+                        <td>@turn.Defence</td>
+                        <td>@turn.Attack</td>
+                        <td>@turn.Damage</td>
+                    </tr>                    
+                }
+            </tbody>
+        }
+</table>
+
 
 @code {
     [Parameter]
     public string? ScenarioId { get; set; }
 
     private CombatScenarioState _scenarioState;
+    private List<CombatRound> _rounds = new();
     
     protected override void OnParametersSet()
     {
@@ -21,7 +44,51 @@
         if (ScenarioId != null)
         {
             _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId) ?? new CombatScenarioState();
+            RunSimulation(_scenarioState);
         }
+        
+    }
+
+    private void RunSimulation(CombatScenarioState combatScenarioState)
+    {
+        _rounds.Clear();
+        var roundNumber = 0;
+        var attackers = combatScenarioState.AttackerBuildStates.Select(x => new Attacker(x)).ToArray();
+        var defenders = combatScenarioState.DefenderBuildStates.Select(x => new Defender(x)).ToArray();
+        while (AnyoneAlive(defenders))
+        {
+            var round = new CombatRound(roundNumber);
+            _rounds.Add(round);
+            foreach (var attacker in attackers)
+            {
+                var target = FindLivingDefender(defenders);
+                var attackRoll = CombatSystem.RollD20();
+                var isHit = CombatSystem.IsHit(target.Build.ArmorClass, attacker.Build.AttackBonus, attackRoll);
+                var turn = new CombatTurn(attacker, target, attackRoll);
+                round.Turns.Add(turn);
+                if (isHit)
+                {
+                    var damage = CombatSystem.RollDamage(attacker.Build.DamageDiceState.DiceCount, attacker.Build.DamageBonus, attacker.Build.DamageDiceState.DiceType, out var damageRolls);
+                    target.CurrentHitPoints -= damage;
+                    turn.DamageRolls = damageRolls;
+                }
+                if (!AnyoneAlive(defenders))
+                {
+                    break;
+                }
+            }
+            roundNumber++;
+        }
+    }
+
+    private static Defender FindLivingDefender(IEnumerable<Defender> defenders)
+    {
+        return defenders.First(x => x.Alive);
+    }
+
+    private static bool AnyoneAlive(IEnumerable<Defender> defenders)
+    {
+        return defenders.Any(defender => defender.Alive);
     }
 
 }

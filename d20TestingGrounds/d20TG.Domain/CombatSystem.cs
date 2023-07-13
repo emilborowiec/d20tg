@@ -35,12 +35,6 @@ public static class CombatSystem
         return rolls.Sum();
     }
 
-    public static int RollAttack(int attackBonus, out int roll)
-    {
-        roll = RollD20();
-        return roll + attackBonus;
-    }
-
     public static int RollDamage(int diceCount, int damageBonus, DiceType diceType, out int[] rolls)
     {
         return RollDice(diceCount, diceType, out rolls) + damageBonus;

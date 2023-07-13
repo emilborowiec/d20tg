@@ -1,13 +1,13 @@
-﻿using d20TG.Domain;
+﻿using d20TG.Features.ScenarioSetup.State;
 
 namespace d20TG.Features.CombatSimulations;
 
 public class Attacker
 {
-    public Attacker(AttackerBuild build)
+    public Attacker(AttackerBuildState build)
     {
         Build = build;
     }
 
-    public AttackerBuild Build { get; }
+    public AttackerBuildState Build { get; }
 }

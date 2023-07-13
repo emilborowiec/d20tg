@@ -4,18 +4,15 @@
 
 <h4>DamageDice</h4>
 
-@if (State != null)
-{
-    <input type="number" min="1" max="100" value="@State.DiceCount" @onchange="HandleDiceCountChangeAsync"/>
-    <label>
-        d
-        <select @onchange="HandleDiceTypeChangeAsync">
-            @foreach (var value in Enum.GetValues<DiceType>()) {
-                    <option value="@value" selected="@(value == _selectedDiceType)">@value</option>
-                }
-        </select>
-    </label>
-}
+<input type="number" min="1" max="100" value="@State.DiceCount" @onchange="HandleDiceCountChangeAsync"/>
+<label>
+    d
+    <select @onchange="HandleDiceTypeChangeAsync">
+        @foreach (var value in Enum.GetValues<DiceType>()) {
+                <option value="@value" selected="@(value == _selectedDiceType)">@value</option>
+            }
+    </select>
+</label>
 
 @code {
 
@@ -29,10 +26,6 @@
 
     protected override void OnParametersSet()
     {
-        if (State == null)
-        {
-            return;
-        }
         _selectedDiceType = State.DiceType;
         
         base.OnParametersSet();
