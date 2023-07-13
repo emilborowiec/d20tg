@@ -9,12 +9,11 @@
 
 @if (_scenarioState != null)
 {
+    <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
 
-    <CombatScenarioStateView ScenarioState="@_scenarioState.Value" />
-
-    <input type="number" min="1" max="100" @bind="RunCount" />
+    <input type="number" min="1" max="100" @bind="RunCount"/>
     <button @onclick="HandleRunSimulationsClick">Run Simulation</button>
-             
+
     @for (var i = 0; i < _runs.Count; i++)
     {
         <h3>Run: @i</h3>
@@ -22,38 +21,53 @@
             <thead>
             <tr>Course of Combat</tr>
             </thead>
-                @foreach (var round in _runs[i].Rounds)
+            @foreach (var round in _runs[i].Rounds)
+            {
+                <tbody>
+                @foreach (var turn in round.Turns)
                 {
-                    <tbody>
-                        @foreach (var turn in round.Turns)
-                        {
-                            <tr>
-                                <td rowspan="@round.Turns.Count">@(round.RoundNumber+1)</td>
-                                <td>@turn.Defence</td>
-                                <td>@turn.Attack</td>
-                                <td>@turn.Damage</td>
-                            </tr>                    
-                        }
-                    </tbody>
+                    <tr>
+                        <td rowspan="@round.Turns.Count">@(round.RoundNumber + 1)</td>
+                        <td>@turn.Defence</td>
+                        <td>@turn.Attack</td>
+                        <td>@turn.Damage</td>
+                    </tr>
                 }
+                </tbody>
+            }
         </table>
-    }                             
+    }
+
+    @if (_runs.Count > 0)
+    {
+        <h2>Rounds to beat distribution: </h2>
+        @foreach (var kvPair in GetRoundsToBeatDistribution(_runs))
+        {
+            <p>@kvPair.Key rounds: @kvPair.Value runs</p>
+        }
+    }
 }
 else
 {
-    <p>Scenario not found or expired!</p>    
+    <p>Scenario not found or expired!</p>
 }
 
 
 @code {
+
     [Parameter]
     public string? ScenarioId { get; set; }
-    
+
     public int RunCount { get; set; } = 20;
 
     private CombatScenarioState? _scenarioState;
     private List<SimulationRun> _runs = new();
-    
+
+    private static Dictionary<int, int> GetRoundsToBeatDistribution(IEnumerable<SimulationRun> runs)
+    {
+        return runs.GroupBy(x => x.Rounds.Count).ToDictionary(x => x.Key, x => x.Count());
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -62,7 +76,7 @@ else
         {
             return;
         }
-        
+
         _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId);
     }
 
@@ -81,7 +95,7 @@ else
         }
         return runs;
     }
-    
+
     private SimulationRun RunSimulation(CombatScenarioState combatScenarioState)
     {
         var run = new SimulationRun();
@@ -112,7 +126,7 @@ else
             }
             roundNumber++;
         }
-        
+
         return run;
     }
 
@@ -135,5 +149,4 @@ else
 
         _runs = RunSimulations(RunCount, _scenarioState.Value);
     }
-
 }
