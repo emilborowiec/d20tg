@@ -1,0 +1,22 @@
+﻿@page "/scenario-setup"
+@using d20TG.Features.ScenarioSetup.Services
+@using d20TG.Features.ScenarioSetup.State
+@inject ICombatScenarioRepository ScenarioRepository
+@inject IMyNavigationManager MyNavigation
+
+<PageTitle>Scenario | d20 Testing Grounds</PageTitle>
+
+<div class="p-8">
+    <h1 class="text-5xl">D20 Lab</h1>
+
+    <CombatScenario OnScenarioSubmittedCallback="HandleScenarioSubmitted" />
+</div>
+
+
+@code {
+    private void HandleScenarioSubmitted(CombatScenarioState combatScenarioState)
+    {
+        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
+        MyNavigation.NavigateToSimulation(scenarioGuid);
+    }
+}

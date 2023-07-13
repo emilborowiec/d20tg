@@ -1,22 +1,19 @@
 ﻿@page "/"
-@using d20TG.Features.ScenarioSetup.Services
-@using d20TG.Features.ScenarioSetup.State
-@inject ICombatScenarioRepository ScenarioRepository
-@inject IMyNavigationManager MyNavigation
 
-<PageTitle>D20 Lab</PageTitle>
+<PageTitle>d20 Testing Grounds</PageTitle>
 
-<div class="p-8">
-    <h1 class="text-5xl">D20 Lab</h1>
-
-    <CombatScenario OnScenarioSubmittedCallback="HandleScenarioSubmitted" />
+<div>
+    <div class="flex flex-row">
+        <h2 class="text-4xl font-medium">Saved Scenarios</h2>
+        <div class="grow"></div>
+        <a href="@MyRoutes.ScenarioSetupRouteBase" class="bg-transparent hover:bg-orange-500 text-orange-700 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded">NEW SCENARIO</a>
+    </div>
+    <div class="h-80 flex justify-center items-center">
+        <span class="text-xl font-semibold text-gray-400">No saved scenarios found!</span>
+    </div>
 </div>
 
 
 @code {
-    private void HandleScenarioSubmitted(CombatScenarioState combatScenarioState)
-    {
-        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
-        MyNavigation.NavigateToSimulation(scenarioGuid);
-    }
+
 }
