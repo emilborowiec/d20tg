@@ -1,15 +1,17 @@
 ﻿@using d20TG.Features.ScenarioSetup.State
-@using d20TG.Features.ScenarioSetup.ViewModels
-<h3>Attackers</h3>
 
-@if (State != null)
+<h3 class="text-3xl">Attackers</h3>
+
+@if (AttackerBuilds != null)
 {
-    <AttackerBuild State="@State[0]" OnAttackerBuildChangeCallback="HandleAttackerBuildChangeAsync" />
+    <div class="flex flex-row">
+        <AttackerBuild State="@AttackerBuilds[0]" OnAttackerBuildChangeCallback="HandleAttackerBuildChangeAsync" />
+    </div>
 }
 
 @code {
     [Parameter, EditorRequired]
-    public AttackerBuildState[]? State { get; set; }
+    public AttackerBuildState[]? AttackerBuilds { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<AttackerBuildState> OnAttackerBuildStateChangeCallback { get; set; }

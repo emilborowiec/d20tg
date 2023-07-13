@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Blazored.LocalStorage;
 using d20TG;
 using d20TG.Features.ScenarioSetup.Services;
 using d20TG.Shared;
@@ -13,5 +16,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<ICombatScenarioService, CombatScenarioService>();
 builder.Services.AddScoped<ICombatScenarioRepository, CombatScenarioRepository>();
 builder.Services.AddSingleton<IMyNavigationManager, MyNavigationManager>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();

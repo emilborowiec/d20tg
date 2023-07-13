@@ -2,23 +2,35 @@
 @using d20TG.Features.ScenarioSetup.Services
 @using d20TG.Features.ScenarioSetup.State
 
-<h4>DamageDice</h4>
+<div>
 
-<input type="number" min="1" max="100" value="@State.DiceCount" @onchange="HandleDiceCountChangeAsync"/>
-<label>
-    d
-    <select @onchange="HandleDiceTypeChangeAsync">
-        @foreach (var value in Enum.GetValues<DiceType>()) {
+    <label for="dice-count" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Damage Dice</label>
+
+    <div class="flex flex-row">
+
+        <input id="dice-count"
+               type="number"
+               min="1"
+               max="100"
+               value="@State.DiceCount"
+               @onchange="HandleDiceCountChangeAsync"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+
+        <select @onchange="HandleDiceTypeChangeAsync"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            @foreach (var value in Enum.GetValues<DiceType>())
+            {
                 <option value="@value" selected="@(value == _selectedDiceType)">@value</option>
             }
-    </select>
-</label>
+        </select>
+    </div>
+</div>
 
 @code {
 
     [Parameter, EditorRequired]
     public DamageDiceState State { get; set; }
-    
+
     [Parameter, EditorRequired]
     public EventCallback<DamageDiceState> OnDamageDiceChangedCallback { get; set; }
 
@@ -27,11 +39,10 @@
     protected override void OnParametersSet()
     {
         _selectedDiceType = State.DiceType;
-        
+
         base.OnParametersSet();
     }
-    
-    
+
 
     private async Task HandleDiceTypeChangeAsync(ChangeEventArgs eventArgs)
     {

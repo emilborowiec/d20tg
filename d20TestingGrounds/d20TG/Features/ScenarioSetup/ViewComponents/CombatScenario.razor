@@ -1,18 +1,38 @@
 ﻿@using d20TG.Features.ScenarioSetup.State
 @using d20TG.Features.ScenarioSetup.Utils
 @using d20TG.Features.ScenarioSetup.ViewModels
-<h2 class="text-4xl">CombatScenario</h2>
+@inject IMyNavigationManager MyNavigation
 
-<Defenders State="@_viewModel.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange" />
-<Attackers State="@_viewModel.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange" />
+<h2 class="text-4xl font-semibold mb-2">CombatScenario</h2>
 
-<button @onclick="HandleRunScenarioClickAsync">Run Scenario</button>
+<div class="mb-2">
+    <Defenders DefenderBuilds="@_viewModel.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange" />
+</div>
+<div class="mb-2">
+    <Attackers AttackerBuilds="@_viewModel.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange" />
+</div>
+
+<button @onclick="HandleSaveAndRunClickAsync"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    Save and Run
+</button>
+<button @onclick="HandleSaveAndRunClickAsync"
+        class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+    Save and Exit
+</button>
+<button @onclick="HandleDiscardClickAsync"
+        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+    Discard
+</button>
 
 @code {
     private CombatScenarioViewModel _viewModel = new ();
     
     [Parameter, EditorRequired]
-    public EventCallback<CombatScenarioState> OnScenarioSubmittedCallback { get; set; }
+    public EventCallback<CombatScenarioState> OnSaveAndRunCallback { get; set; }
+    
+    [Parameter, EditorRequired]
+    public EventCallback<CombatScenarioState> OnSaveAndExitCallback { get; set; }
 
     private void HandleDefenderBuildStateChange(DefenderBuildState defenderBuildState)
     {
@@ -24,9 +44,19 @@
         _viewModel.UpdateAttackerFromState(attackerBuildState);
     }
 
-    private async Task HandleRunScenarioClickAsync()
+    private async Task HandleSaveAndRunClickAsync()
     {
-        await OnScenarioSubmittedCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+        await OnSaveAndRunCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+    }
+
+    private async Task HandleSaveAndExitClickAsync()
+    {
+        await OnSaveAndExitCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+    }
+
+    private void HandleDiscardClickAsync()
+    {
+        MyNavigation.NavigateToHome();
     }
 
 }

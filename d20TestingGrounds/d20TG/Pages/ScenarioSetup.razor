@@ -6,17 +6,22 @@
 
 <PageTitle>Scenario | d20 Testing Grounds</PageTitle>
 
-<div class="p-8">
-    <h1 class="text-5xl">D20 Lab</h1>
-
-    <CombatScenario OnScenarioSubmittedCallback="HandleScenarioSubmitted" />
+<div>
+    <CombatScenario OnSaveAndRunCallback="HandleSaveAndRun" OnSaveAndExitCallback="HandleSaveAndExit" />
 </div>
 
 
 @code {
-    private void HandleScenarioSubmitted(CombatScenarioState combatScenarioState)
+    private void HandleSaveAndRun(CombatScenarioState combatScenarioState)
     {
         var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
         MyNavigation.NavigateToSimulation(scenarioGuid);
     }
+
+    private void HandleSaveAndExit(CombatScenarioState combatScenarioState)
+    {
+        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
+        MyNavigation.NavigateToHome();
+    }
+
 }

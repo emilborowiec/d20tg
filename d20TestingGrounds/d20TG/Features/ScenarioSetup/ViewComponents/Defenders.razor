@@ -1,14 +1,17 @@
 ﻿@using d20TG.Features.ScenarioSetup.State
-<h3>Defenders</h3>
 
-@if (State != null)
+<h3 class="text-3xl">Defenders</h3>
+
+@if (DefenderBuilds != null)
 {
-    <DefenderBuild State="@State[0]" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChangeAsync" />
+    <div class="flex flex-row">
+        <DefenderBuild State="@DefenderBuilds[0]" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChangeAsync" />
+    </div>
 }
 
 @code {
     [Parameter, EditorRequired] 
-    public DefenderBuildState[]? State { get; set; }
+    public DefenderBuildState[]? DefenderBuilds { get; set; }
     
     [Parameter, EditorRequired]
     public EventCallback<DefenderBuildState> OnDefenderBuildStateChangeCallback { get; set; }

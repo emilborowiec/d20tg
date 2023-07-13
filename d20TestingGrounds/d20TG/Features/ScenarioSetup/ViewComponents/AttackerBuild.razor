@@ -1,31 +1,36 @@
 ﻿@using d20TG.Features.ScenarioSetup.State
 @using d20TG.Features.ScenarioSetup.Services
 
-<h3>AttackerBuild</h3>
-
-@if (State != null)
-{
-    <label>
-        Attack Bonus
-        <input type="number" min="-100" max="100" value="@State.AttackBonus" @onchange="HandleAttackBonusChangeAsync" />
-    </label>
-    <label>
-        Damage Bonus
-        <input type="number" min="0" max="100" value="@State.DamageBonus" @onchange="HandleDamageBonusChangeAsync" />
-    </label>
-    <DamageDice State="State.DamageDiceState" OnDamageDiceChangedCallback="HandleDamageDiceChangedAsync" />
-}
-else
-{
-    <p>No state provided!</p>
-}
+<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div class="grid gap-6 mb-6 md:grid-cols-1">
+        <label class="block text-sm font-medium text-gray-900 dark:text-white">
+            Attack Bonus
+            <input type="number" 
+                   min="-100" 
+                   max="100" 
+                   value="@State.AttackBonus" 
+                   @onchange="HandleAttackBonusChangeAsync"
+                   class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        </label>
+        <label class="block text-sm font-medium text-gray-900 dark:text-white">
+            Damage Bonus
+            <input type="number" 
+                   min="0" 
+                   max="100" 
+                   value="@State.DamageBonus" 
+                   @onchange="HandleDamageBonusChangeAsync"
+                   class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        </label>
+        <DamageDice State="State.DamageDiceState" OnDamageDiceChangedCallback="HandleDamageDiceChangedAsync"/>
+    </div>
+</div>
 
 @code {
 
     [Parameter, EditorRequired]
     public AttackerBuildState State { get; set; }
 
-    [Parameter, EditorRequired] 
+    [Parameter, EditorRequired]
     public EventCallback<AttackerBuildState> OnAttackerBuildChangeCallback { get; set; }
 
     private async Task HandleAttackBonusChangeAsync(ChangeEventArgs eventArgs)
