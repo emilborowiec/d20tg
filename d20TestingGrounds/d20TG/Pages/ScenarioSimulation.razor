@@ -7,7 +7,12 @@
 
 <h3>ScenarioSimulation</h3>
 
-<CombatScenarioStateView ScenarioState="@_scenarioState" />
+@if (_scenarioState != null)
+{
+
+<CombatScenarioStateView ScenarioState="@_scenarioState.Value" />
+
+<button @onclick="@(() => RunSimulation(@_scenarioState.Value))">Run Simulation</button>
 
 <table>
     <thead>
@@ -19,7 +24,7 @@
                 @foreach (var turn in round.Turns)
                 {
                     <tr>
-                        <td rowspan="@round.Turns.Count">@round.RoundNumber+1</td>
+                        <td rowspan="@round.Turns.Count">@(round.RoundNumber+1)</td>
                         <td>@turn.Defence</td>
                         <td>@turn.Attack</td>
                         <td>@turn.Damage</td>
@@ -28,25 +33,37 @@
             </tbody>
         }
 </table>
+}
+else
+{
+    <p>Scenario not found or expired!</p>    
+}
 
 
 @code {
     [Parameter]
     public string? ScenarioId { get; set; }
 
-    private CombatScenarioState _scenarioState;
+    private CombatScenarioState? _scenarioState;
     private List<CombatRound> _rounds = new();
     
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        if (ScenarioId != null)
+        if (ScenarioId == null)
         {
-            _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId) ?? new CombatScenarioState();
-            RunSimulation(_scenarioState);
+            return;
         }
         
+        _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId);
+
+        if (_scenarioState == null)
+        {
+            return;
+        }
+        
+        RunSimulation(_scenarioState.Value);
     }
 
     private void RunSimulation(CombatScenarioState combatScenarioState)
