@@ -1,10 +1,16 @@
-﻿namespace d20TG.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace d20TG.Domain;
 
 public class AttackerBuild
 {
+    [Range(-100, 100)]
     public int AttackBonus { get; set; } 
+    [Range(-100, 100)]
     public int DamageBonus { get; set; }
-    public DamageDice DamageDice { get; } = new();
+    [Required, JsonInclude]
+    public DamageDice DamageDice { get; private set; } = new();
 
     public override string ToString()
     {

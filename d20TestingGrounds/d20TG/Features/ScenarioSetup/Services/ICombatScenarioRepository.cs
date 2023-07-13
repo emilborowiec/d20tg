@@ -1,10 +1,11 @@
-﻿using d20TG.Features.ScenarioSetup.State;
+﻿using d20TG.Features.ScenarioSetup.Model;
 
 namespace d20TG.Features.ScenarioSetup.Services;
 
 public interface ICombatScenarioRepository
 {
-    CombatScenarioState? GetScenarioState(string guid);
+    Task<string[]> GetAllScenarioIdsAsync();
 
-    string SaveScenario(CombatScenarioState combatScenarioState);
+    Task<string> SaveScenarioAsync(CombatScenario combatScenarioState);
+    Task<CombatScenario> LoadScenarioAsync(string guid);
 }

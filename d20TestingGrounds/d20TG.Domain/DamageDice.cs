@@ -1,15 +1,20 @@
-﻿namespace d20TG.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace d20TG.Domain;
 
 public class DamageDice
 {
+    private int _diceCount = 1;
     public DiceType DiceType { get; set; } = DiceType.D6;
-    public int DiceCount { get; private set; } = 1;
-
-    public void SetDiceCount(int newDiceCount)
-    {
-        if (newDiceCount is > 0 and < 100)
+    [Range(1, 100)]
+    public int DiceCount {
+        get => _diceCount;
+        set
         {
-            DiceCount = newDiceCount;
+            if (value is > 0 and < 100)
+            {
+                _diceCount = value;
+            }
         }
     }
 

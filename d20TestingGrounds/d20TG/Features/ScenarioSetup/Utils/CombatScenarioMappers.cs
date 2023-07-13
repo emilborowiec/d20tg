@@ -1,6 +1,5 @@
 ﻿using d20TG.Features.ScenarioSetup.Model;
 using d20TG.Features.ScenarioSetup.State;
-using d20TG.Features.ScenarioSetup.ViewModels;
 using AttackerBuild = d20TG.Domain.AttackerBuild;
 using DamageDice = d20TG.Domain.DamageDice;
 using DefenderBuild = d20TG.Domain.DefenderBuild;
@@ -29,23 +28,24 @@ public static class CombatScenarioMappers
         return new CombatScenarioState(model.AttackerBuilds.Select(x => x.ToReadOnlyState()).ToArray(), model.DefenderBuilds.Select(x => x.ToReadOnlyState()).ToArray());
     }
     
-    public static DamageDiceState ToReadOnlyState(this DamageDiceViewModel viewModel)
+    public static void UpdateFromReadOnlyState(this DamageDice damageDice, DamageDiceState damageDiceState)
     {
-        return new DamageDiceState(viewModel.DiceCount, viewModel.DiceType);
+        damageDice.DiceCount = damageDiceState.DiceCount;
+        damageDice.DiceType = damageDiceState.DiceType;
+    }
+    
+        
+    public static void UpdateDefenderFromReadOnlyState(this DefenderBuild defenderBuild, DefenderBuildState defenderBuildState)
+    {
+        defenderBuild.ArmorClass = defenderBuildState.ArmorClass;
+        defenderBuild.HitPoints = defenderBuildState.HitPoints;
     }
 
-    public static AttackerBuildState ToReadOnlyState(this AttackerBuildViewModel viewModel)
+    public static void UpdateAttackerFromReadOnlyState(this AttackerBuild attackerBuild, AttackerBuildState attackerBuildState)
     {
-        return new AttackerBuildState(viewModel.AttackBonus, viewModel.DamageBonus, viewModel.DamageDice.ToReadOnlyState());
+        attackerBuild.AttackBonus = attackerBuildState.AttackBonus;
+        attackerBuild.DamageBonus = attackerBuildState.DamageBonus;
+        attackerBuild.DamageDice.UpdateFromReadOnlyState(attackerBuildState.DamageDiceState);
     }
 
-    public static DefenderBuildState ToReadOnlyState(this DefenderBuildViewModel viewModel)
-    {
-        return new DefenderBuildState(viewModel.ArmorClass, viewModel.HitPoints);
-    }
-
-    public static CombatScenarioState ToReadOnlyState(this CombatScenarioViewModel viewModel)
-    {
-        return new CombatScenarioState(viewModel.AttackerBuilds.Select(x => x.ToReadOnlyState()).ToArray(), viewModel.DefenderBuilds.Select(x => x.ToReadOnlyState()).ToArray());
-    }
 }

@@ -2,6 +2,7 @@
 @using d20TG.Features.ScenarioSetup.State
 @using d20TG.Features.CombatSimulations
 @using d20TG.Domain
+@using d20TG.Features.ScenarioSetup.Utils
 @attribute [Route(MyRoutes.ScenarioSimulationRoute)]
 @inject ICombatScenarioRepository ScenarioRepository
 
@@ -68,16 +69,18 @@ else
         return runs.GroupBy(x => x.Rounds.Count).ToDictionary(x => x.Key, x => x.Count());
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
-
         if (ScenarioId == null)
         {
             return;
         }
 
-        _scenarioState = ScenarioRepository.GetScenarioState(ScenarioId);
+        var scenario = await ScenarioRepository.LoadScenarioAsync(ScenarioId);
+        Console.WriteLine($"Loaded scenario: {ScenarioId} {scenario}");
+        _scenarioState = scenario.ToReadOnlyState();
+
+        await base.OnParametersSetAsync();
     }
 
     private class SimulationRun

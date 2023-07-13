@@ -1,26 +1,26 @@
 ﻿@page "/scenario-setup"
 @using d20TG.Features.ScenarioSetup.Services
-@using d20TG.Features.ScenarioSetup.State
+@using d20TG.Features.ScenarioSetup.Model
 @inject ICombatScenarioRepository ScenarioRepository
 @inject IMyNavigationManager MyNavigation
 
 <PageTitle>Scenario | d20 Testing Grounds</PageTitle>
 
 <div>
-    <CombatScenario OnSaveAndRunCallback="HandleSaveAndRun" OnSaveAndExitCallback="HandleSaveAndExit" />
+    <CombatScenarioSetup OnSaveAndRunCallback="HandleSaveAndRunAsync" OnSaveAndExitCallback="HandleSaveAndExitAsync" />
 </div>
 
 
 @code {
-    private void HandleSaveAndRun(CombatScenarioState combatScenarioState)
+    private async Task HandleSaveAndRunAsync(CombatScenario combatScenario)
     {
-        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
+        var scenarioGuid = await ScenarioRepository.SaveScenarioAsync(combatScenario);
         MyNavigation.NavigateToSimulation(scenarioGuid);
     }
 
-    private void HandleSaveAndExit(CombatScenarioState combatScenarioState)
+    private async Task HandleSaveAndExitAsync(CombatScenario combatScenario)
     {
-        var scenarioGuid = ScenarioRepository.SaveScenario(combatScenarioState);
+        await ScenarioRepository.SaveScenarioAsync(combatScenario);
         MyNavigation.NavigateToHome();
     }
 

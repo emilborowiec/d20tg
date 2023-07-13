@@ -1,22 +1,22 @@
 ﻿@using d20TG.Features.ScenarioSetup.State
 @using d20TG.Features.ScenarioSetup.Utils
-@using d20TG.Features.ScenarioSetup.ViewModels
+@using d20TG.Features.ScenarioSetup.Model
 @inject IMyNavigationManager MyNavigation
 
 <h2 class="text-4xl font-semibold mb-2">CombatScenario</h2>
 
 <div class="mb-2">
-    <Defenders DefenderBuilds="@_viewModel.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange" />
+    <Defenders DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange" />
 </div>
 <div class="mb-2">
-    <Attackers AttackerBuilds="@_viewModel.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange" />
+    <Attackers AttackerBuilds="@_model.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange" />
 </div>
 
 <button @onclick="HandleSaveAndRunClickAsync"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
     Save and Run
 </button>
-<button @onclick="HandleSaveAndRunClickAsync"
+<button @onclick="HandleSaveAndExitClickAsync"
         class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
     Save and Exit
 </button>
@@ -26,32 +26,34 @@
 </button>
 
 @code {
-    private CombatScenarioViewModel _viewModel = new ();
+    private CombatScenario _model = new ();
     
     [Parameter, EditorRequired]
-    public EventCallback<CombatScenarioState> OnSaveAndRunCallback { get; set; }
+    public EventCallback<CombatScenario> OnSaveAndRunCallback { get; set; }
     
     [Parameter, EditorRequired]
-    public EventCallback<CombatScenarioState> OnSaveAndExitCallback { get; set; }
+    public EventCallback<CombatScenario> OnSaveAndExitCallback { get; set; }
 
     private void HandleDefenderBuildStateChange(DefenderBuildState defenderBuildState)
     {
-        _viewModel.UpdateDefenderFromState(defenderBuildState);
+        _model.DefenderBuilds[0].UpdateDefenderFromReadOnlyState(defenderBuildState);
+        Console.WriteLine($"Model after update: {_model}");
     }
 
     private void HandleAttackerBuildStateChange(AttackerBuildState attackerBuildState)
     {
-        _viewModel.UpdateAttackerFromState(attackerBuildState);
+        _model.AttackerBuilds[0].UpdateAttackerFromReadOnlyState(attackerBuildState);
+        Console.WriteLine($"Model after update: {_model}");
     }
 
     private async Task HandleSaveAndRunClickAsync()
     {
-        await OnSaveAndRunCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+        await OnSaveAndRunCallback.InvokeAsync(_model);
     }
 
     private async Task HandleSaveAndExitClickAsync()
     {
-        await OnSaveAndExitCallback.InvokeAsync(_viewModel.ToReadOnlyState());
+        await OnSaveAndExitCallback.InvokeAsync(_model);
     }
 
     private void HandleDiscardClickAsync()

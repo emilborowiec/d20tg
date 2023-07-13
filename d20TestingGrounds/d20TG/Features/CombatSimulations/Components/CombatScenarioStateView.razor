@@ -2,18 +2,11 @@
 
 <h3>CombatScenarioStateView</h3>
 
-@if (ScenarioState != null)
-{
-    <p>Armor class: @ScenarioState.DefenderBuildStates[0].ArmorClass</p>
-    <p>Hit points: @ScenarioState.DefenderBuildStates[0].HitPoints</p>
+<p>Armor class: @ScenarioState.DefenderBuildStates[0].ArmorClass</p>
+<p>Hit points: @ScenarioState.DefenderBuildStates[0].HitPoints</p>
 
-    <p>Attack bonus: @ScenarioState.AttackerBuildStates[0].AttackBonus</p>
-    <p>Damage: @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceCount d @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceType + @ScenarioState.AttackerBuildStates[0].DamageBonus</p>
-}
-else
-{
-    <p>nothing to show</p>
-}
+<p>Attack bonus: @ScenarioState.AttackerBuildStates[0].AttackBonus</p>
+<p>Damage: @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceCount d @ScenarioState.AttackerBuildStates[0].DamageDiceState.DiceType + @ScenarioState.AttackerBuildStates[0].DamageBonus</p>
 
 
 
