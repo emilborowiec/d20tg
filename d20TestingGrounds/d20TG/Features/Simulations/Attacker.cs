@@ -1,6 +1,6 @@
-﻿using d20TG.Features.ScenarioSetup.State;
+﻿using d20TG.Features.Scenarios.State;
 
-namespace d20TG.Features.CombatSimulations;
+namespace d20TG.Features.Simulations;
 
 public class Attacker
 {

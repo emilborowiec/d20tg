@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using d20TG.Domain;
 
-namespace d20TG.Features.ScenarioSetup.Model;
+namespace d20TG.Features.Scenarios.Model;
 
 public class CombatScenario : IValidatableObject
 {

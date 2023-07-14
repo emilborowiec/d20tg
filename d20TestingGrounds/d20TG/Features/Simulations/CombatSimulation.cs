@@ -1,4 +1,4 @@
-﻿namespace d20TG.Features.CombatSimulations;
+﻿namespace d20TG.Features.Simulations;
 
 public class CombatSimulation
 {

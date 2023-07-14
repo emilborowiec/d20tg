@@ -1,23 +1,38 @@
-﻿@using d20TG.Features.ScenarioSetup.Services
-@using d20TG.Features.ScenarioSetup.State
-@using d20TG.Features.CombatSimulations
-@using d20TG.Domain
-@using d20TG.Features.ScenarioSetup.Utils
+﻿@using d20TG.Domain
+@using d20TG.Features.Scenarios.Services
+@using d20TG.Features.Scenarios.State
+@using d20TG.Features.Scenarios.Utils
+@using d20TG.Features.Simulations
 @attribute [Route(MyRoutes.ScenarioSimulationRoute)]
 @inject ICombatScenarioRepository ScenarioRepository
 
-<h3>ScenarioSimulation</h3>
+<PageTitle>Simulation | d20 Testing Grounds</PageTitle>
+
+<h2 class="text-4xl font-extrabold">Combat Scenario Simulation</h2>
 
 @if (_scenarioState != null)
 {
+    <h3 class="text-3xl font-bold">Scenario</h3>
     <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
 
-    <input type="number" min="1" max="100" @bind="RunCount"/>
-    <button @onclick="HandleRunSimulationsClick">Run Simulation</button>
+    <label for="combat-runs"
+           class="block mb-2 text-sm font-medium text-gray-900">
+        Combat runs to simulate
+    </label>
+    <input id="combat-runs"
+           type="number" 
+           min="1" 
+           max="100" 
+           @bind="RunCount"
+           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"/>
+    <button @onclick="HandleRunSimulationsClick"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
+        Run Simulation
+    </button>
 
     @for (var i = 0; i < _runs.Count; i++)
     {
-        <h3>Run: @i</h3>
+        <h4 class="text-2xl font-bold">Run: @i</h4>
         <table>
             <thead>
             <tr>Course of Combat</tr>
@@ -41,7 +56,7 @@
 
     @if (_runs.Count > 0)
     {
-        <h2>Rounds to beat distribution: </h2>
+        <h3 class="text-3xl font-bold">Rounds to beat distribution: </h3>
         @foreach (var kvPair in GetRoundsToBeatDistribution(_runs))
         {
             <p>@kvPair.Key rounds: @kvPair.Value runs</p>

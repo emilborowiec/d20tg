@@ -1,14 +1,14 @@
 ﻿@page "/scenario-setup"
-@using d20TG.Features.ScenarioSetup.Services
-@using d20TG.Features.ScenarioSetup.Model
+@using d20TG.Features.Scenarios.Model
+@using d20TG.Features.Scenarios.Services
 @inject ICombatScenarioRepository ScenarioRepository
 @inject IMyNavigationManager MyNavigation
 
 <PageTitle>Scenario | d20 Testing Grounds</PageTitle>
 
-<div>
-    <CombatScenarioForm OnSaveAndRunCallback="HandleSaveAndRunAsync" OnSaveAndExitCallback="HandleSaveAndExitAsync" />
-</div>
+<h2 class="text-4xl font-semibold mb-2">CombatScenario</h2>
+
+<CombatScenarioForm OnSaveAndRunCallback="HandleSaveAndRunAsync" OnSaveAndExitCallback="HandleSaveAndExitAsync" />
 
 
 @code {

@@ -1,6 +1,6 @@
-﻿using d20TG.Features.ScenarioSetup.Model;
+﻿using d20TG.Features.Scenarios.Model;
 
-namespace d20TG.Features.ScenarioSetup.Services;
+namespace d20TG.Features.Scenarios.Services;
 
 public interface ICombatScenarioRepository
 {

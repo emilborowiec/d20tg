@@ -1,6 +1,6 @@
 using Blazored.LocalStorage;
 using d20TG;
-using d20TG.Features.ScenarioSetup.Services;
+using d20TG.Features.Scenarios.Services;
 using d20TG.Shared;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

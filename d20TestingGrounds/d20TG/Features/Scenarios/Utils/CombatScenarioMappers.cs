@@ -1,10 +1,10 @@
-﻿using d20TG.Features.ScenarioSetup.Model;
-using d20TG.Features.ScenarioSetup.State;
+﻿using d20TG.Features.Scenarios.Model;
+using d20TG.Features.Scenarios.State;
 using AttackerBuild = d20TG.Domain.AttackerBuild;
 using DamageDice = d20TG.Domain.DamageDice;
 using DefenderBuild = d20TG.Domain.DefenderBuild;
 
-namespace d20TG.Features.ScenarioSetup.Utils;
+namespace d20TG.Features.Scenarios.Utils;
 
 public static class CombatScenarioMappers
 {

@@ -1,0 +1,24 @@
+﻿@using d20TG.Features.Scenarios.State
+
+<div class="flex flex-row items-center justify-center">
+    <div>
+        @foreach (var attacker in ScenarioState.AttackerBuildStates)
+        {
+            <AttackerView AttackerBuildState="attacker" />
+        }
+    </div>
+    <div class="grow-0 m-2">VS</div>
+    <div>
+        @foreach (var defender in ScenarioState.DefenderBuildStates)
+        {
+            <DefenderView DefenderBuildState="defender" />
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public CombatScenarioState ScenarioState { get; set; }
+
+}
