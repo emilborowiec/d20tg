@@ -67,4 +67,20 @@ public class CombatScenarioRepository : ICombatScenarioRepository
             throw;
         }
     }
+
+    public async Task DeleteScenarioAsync(string guid)
+    {
+        try
+        {
+            var scenarios =
+                await _localStorage.GetItemAsync<Dictionary<string, CombatScenario>>(ScenariosStorageKey);
+            scenarios.Remove(guid);
+            await _localStorage.SetItemAsync(ScenariosStorageKey, scenarios);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
 }

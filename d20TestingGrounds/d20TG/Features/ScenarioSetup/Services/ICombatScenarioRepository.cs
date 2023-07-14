@@ -8,4 +8,5 @@ public interface ICombatScenarioRepository
 
     Task<string> SaveScenarioAsync(CombatScenario combatScenarioState);
     Task<CombatScenario> LoadScenarioAsync(string guid);
+    Task DeleteScenarioAsync(string guid);
 }

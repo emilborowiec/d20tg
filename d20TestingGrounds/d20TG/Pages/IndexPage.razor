@@ -10,26 +10,7 @@
         <div class="grow"></div>
         <a href="@MyRoutes.ScenarioSetupRouteBase" class="bg-transparent hover:bg-orange-500 text-orange-700 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded">NEW SCENARIO</a>
     </div>
-    @if (_scenarioIds != null && _scenarioIds.Length > 0)
-    {
-        <div>
-            @foreach (var id in _scenarioIds)
-            {
-                <div class="border rounded p-4">
-                    <a href="/scenario-simulation/@id"
-                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                        @id
-                    </a>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="h-80 flex justify-center items-center">
-            <span class="text-xl font-semibold text-gray-400">No saved scenarios found!</span>
-        </div>
-    }
+    <SavedScenariosView />
 </div>
 
 

@@ -16,8 +16,4 @@
     <ProjectReference Include="..\d20TG.Domain\d20TG.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\ScenarioStorage\" />
-  </ItemGroup>
-
 </Project>
