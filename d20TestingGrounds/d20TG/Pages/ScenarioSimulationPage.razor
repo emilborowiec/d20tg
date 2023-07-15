@@ -34,7 +34,7 @@
     {
         var current = i;
         
-        <Accordion Title="@($"Run: {current + 1}")">
+        <Accordion Title="@($"Run: {current + 1} | Rounds taken: {_runs[current].Rounds.Count}")">
             <table>
                 <thead>
                 <tr>Course of Combat</tr>
