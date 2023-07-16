@@ -15,29 +15,38 @@
     <h3 class="text-3xl font-bold">Scenario</h3>
     <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
 
-    <label for="combat-runs"
-           class="block mb-2 text-sm font-medium text-gray-900">
-        Combat runs to simulate
-    </label>
-    <input id="combat-runs"
-           type="number"
-           min="1"
-           max="100"
-           @bind="RunCount"
-           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"/>
-    <button @onclick="HandleRunSimulationsClick"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
-        Run Simulation
-    </button>
+    <div class="flex flex-row items-center bg-amber-200 p-2 my-4 border-b-1 border-t-1 border-gray-300">
+        <div>
+            <label for="combat-runs"
+                   class="block mb-2 text-sm font-medium text-gray-900">
+                Combat runs to simulate
+            </label>
+            <input id="combat-runs"
+                   type="number"
+                   min="1"
+                   max="100"
+                   @bind="RunCount"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"/>
+        </div>
+        <div class="grow" />
+        <button @onclick="HandleRunSimulationsClick"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
+            Run Simulation
+        </button>
+    </div>
 
     @for (var i = 0; i < _runs.Count; i++)
     {
         var current = i;
-        
+
         <Accordion Title="@($"Run: {current + 1} | Rounds taken: {_runs[current].Rounds.Count}")">
             <table>
                 <thead>
-                <tr>Course of Combat</tr>
+                <tr>
+                    <th>Round</th>
+                    <th>Attack roll</th>
+                    <th>Damage roll</th>
+                </tr>
                 </thead>
                 @foreach (var round in _runs[current].Rounds)
                 {
@@ -46,7 +55,6 @@
                     {
                         <tr>
                             <td rowspan="@round.Turns.Count">@(round.RoundNumber + 1)</td>
-                            <td>@turn.Defence</td>
                             <td>@turn.Attack</td>
                             <td>@turn.Damage</td>
                         </tr>
@@ -60,10 +68,21 @@
     @if (_runs.Count > 0)
     {
         <h3 class="text-3xl font-bold">Rounds to beat distribution: </h3>
-        @foreach (var kvPair in GetRoundsToBeatDistribution(_runs))
+        var roundsToBeatDistribution = GetRoundsToBeatDistribution(_runs);
+        foreach (var points in roundsToBeatDistribution)
         {
-            <p>@kvPair.Key rounds: @kvPair.Value runs</p>
+            <p>@points.RunCount rounds: @points.RunCount runs</p>
         }
+        
+        <ApexChart TItem="RoundsToBeatDataPoint"
+                   Title="Rounds to Beat">
+            <ApexPointSeries TItem="RoundsToBeatDataPoint"
+                             Items="roundsToBeatDistribution"
+                             Name="Simulations"
+                             XValue="@(e => e.RoundsToBeat)"
+                             YValue="@(e => e.RunCount)"
+                             SeriesType="SeriesType.Bar"/>
+        </ApexChart>
     }
 }
 else
@@ -82,9 +101,16 @@ else
     private CombatScenarioState? _scenarioState;
     private List<SimulationRun> _runs = new();
 
-    private static Dictionary<int, int> GetRoundsToBeatDistribution(IEnumerable<SimulationRun> runs)
+    private static IEnumerable<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
     {
-        return runs.GroupBy(x => x.Rounds.Count).ToDictionary(x => x.Key, x => x.Count());
+        return runs.GroupBy(x => x.Rounds.Count).Select(g => new RoundsToBeatDataPoint { TotalRunCount = runs.Count, RoundsToBeat = g.Key, RunCount = g.Count() });
+    }
+
+    private class RoundsToBeatDataPoint
+    {
+        public int RoundsToBeat { get; set; }
+        public int RunCount { get; set; }
+        public int TotalRunCount { get; set; }
     }
 
     protected override async Task OnParametersSetAsync()
