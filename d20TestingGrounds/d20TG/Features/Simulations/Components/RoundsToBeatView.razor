@@ -1,28 +1,31 @@
 ﻿@using d20TG.Features.Simulations.Model
 
 <div class="border rounded-xl p-4">
-    <h4 class="text-2xl mb-2 text-center">Rounds to beat distribution</h4>
+    <h4 class="text-2xl mb-2 text-center">Rounds-To-Beat (distribution)</h4>
     
     <ApexChart @ref="_chart" 
-               TItem="RoundsToBeatDataPoint"
-               Title="Rounds to Beat">
+               TItem="RoundsToBeatDataPoint">
         <ApexPointSeries TItem="RoundsToBeatDataPoint"
-                         Items="GetRoundsToBeatDistribution(Runs)"
-                         Name="Simulations"
+                         Items="_dataPoints"
+                         Name="Run Count"
                          XValue="@(e => e.RoundsToBeat)"
                          YValue="@(e => e.RunCount)"
-                         SeriesType="SeriesType.Bar"/>
+                         OrderBy="@(e => e.X)"
+                         SeriesType="SeriesType.Area"/>
     </ApexChart>
 </div>
 
 @code {
     private ApexChart<RoundsToBeatDataPoint>? _chart;
-    
+    private List<RoundsToBeatDataPoint> _dataPoints = new ();
+
     [Parameter, EditorRequired]
-    public List<SimulationRun> Runs { get; set; }
+    public List<SimulationRun> Runs { get; set; } = new();
 
     protected override async Task OnParametersSetAsync()
     {
+        _dataPoints = GetRoundsToBeatDistribution(Runs);
+        FillMissingDataPointsWithZeroes(_dataPoints);
         if (_chart != null)
         {
             await _chart.UpdateSeriesAsync();
@@ -30,9 +33,24 @@
         }
     }
 
-    private static IEnumerable<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
+    private static List<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
     {
-        return runs.GroupBy(x => x.Rounds.Count).Select(g => new RoundsToBeatDataPoint { TotalRunCount = runs.Count, RoundsToBeat = g.Key, RunCount = g.Count() });
+        return runs.GroupBy(x => x.Rounds.Count)
+            .Select(g => new RoundsToBeatDataPoint { RoundsToBeat = g.Key, RunCount = g.Count() })
+            .ToList();
+    }
+
+    private static void FillMissingDataPointsWithZeroes(List<RoundsToBeatDataPoint> dataPoints)
+    {
+        var min = dataPoints.Min(x => x.RoundsToBeat);
+        var max = dataPoints.Max(x => x.RoundsToBeat);
+        for (var i = min; i < max; i++)
+        {
+            if (dataPoints.All(x => x.RoundsToBeat != i))
+            {
+                dataPoints.Add(new RoundsToBeatDataPoint {RoundsToBeat = i, RunCount = 0});
+            }
+        }
     }
 
 }

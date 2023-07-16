@@ -11,15 +11,15 @@ public static class CombatSimulator
         var runs = new List<SimulationRun>();
         for (var i = 0; i < runCount; i++)
         {
-            var run = CombatSimulator.RunSimulation(combatScenarioState);
+            var run = RunSimulation(i+1, combatScenarioState);
             runs.Add(run);
         }
         return runs;
     }
 
-    private static SimulationRun RunSimulation(CombatScenarioState combatScenarioState)
+    private static SimulationRun RunSimulation(int runId, CombatScenarioState combatScenarioState)
     {
-        var run = new SimulationRun();
+        var run = new SimulationRun(runId);
         var roundNumber = 0;
         var attackers = combatScenarioState.AttackerBuildStates.Select(x => new Attacker(x)).ToArray();
         var defenders = combatScenarioState.DefenderBuildStates.Select(x => new Defender(x)).ToArray();

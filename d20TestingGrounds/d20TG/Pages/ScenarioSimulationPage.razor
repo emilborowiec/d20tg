@@ -20,6 +20,7 @@
         {
             <SimulationRunsView Runs="_runs" />
             <RoundsToBeatView Runs="_runs" />
+            <DamagePerRoundView Runs="_runs" />
         }
     }
     else
@@ -49,7 +50,7 @@
         Console.WriteLine($"Loaded scenario: {ScenarioId} {scenario}");
         _scenarioState = scenario.ToReadOnlyState();
 
-        await base.OnParametersSetAsync();
+        HandleRerunSampleClick(SampleSize);
     }
 
     private void HandleRerunSampleClick(int sampleSize)

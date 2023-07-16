@@ -3,12 +3,10 @@
 <div class="border rounded-xl p-4">
     <h4 class="text-2xl mb-2 text-center">Simulation Runs</h4>
     
-    @for (var i = 0; i < Runs.Count; i++)
+    @foreach (var run in Runs)
     {
-        var current = i;
-
-        <Accordion Title="@($"#{current + 1} | Rounds taken: {Runs[current].Rounds.Count} | DPR: {Runs[current].DamagePerRound:f2}")">
-            <CombatSimulationCourse SimulationRun="Runs[current]"/>
+        <Accordion Title="@($"#{run.Id} | Rounds taken: {run.Rounds.Count} | DPR: {run.DamagePerRound:f2}")">
+            <CombatSimulationCourse SimulationRun="run"/>
         </Accordion>
     }
 </div>

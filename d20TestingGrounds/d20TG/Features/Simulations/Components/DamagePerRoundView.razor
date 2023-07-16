@@ -1,0 +1,47 @@
+﻿@using d20TG.Features.Simulations.Model
+
+<div class="border rounded-xl p-4">
+    <h4 class="text-2xl mb-2 text-center">Damage per round</h4>
+
+    <ApexChart @ref="_chart"
+               TItem="SimulationRun"
+               Title="Damage per round"
+               Options="_options">
+        <ApexPointSeries TItem="SimulationRun"
+                         Items="_sortedRuns"
+                         Name="DPR"
+                         XValue="@(e => $"#{e.Id}")"
+                         YValue="@(e => e.DamagePerRound)"
+                         SeriesType="SeriesType.Bar"/>
+    </ApexChart>
+</div>
+
+@code {
+    private ApexChart<SimulationRun>? _chart;
+    private List<SimulationRun>? _sortedRuns;
+    private ApexChartOptions<SimulationRun> _options = new();
+
+    [Parameter, EditorRequired]
+    public List<SimulationRun> Runs { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        _options.Yaxis = new List<YAxis>();
+        _options.Yaxis.Add(new YAxis
+        {
+            DecimalsInFloat = 2,
+            
+        });
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _sortedRuns = Runs.OrderBy(x => x.DamagePerRound).ToList();
+        if (_chart != null)
+        {
+            await _chart.UpdateSeriesAsync();
+            await _chart.RenderAsync();
+        }
+    }
+
+}
