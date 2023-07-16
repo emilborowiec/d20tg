@@ -1,6 +1,6 @@
 ﻿using d20TG.Domain;
 
-namespace d20TG.Features.Simulations;
+namespace d20TG.Features.Simulations.Model;
 
 public class CombatTurn
 {
@@ -20,4 +20,6 @@ public class CombatTurn
     public string Defence => $"{Defender.Build.ArmorClass}";
     public string Attack => $"{AttackRoll} + {Attacker.Build.AttackBonus} = {AttackRoll + Attacker.Build.AttackBonus} ({CombatSystem.IsHit(Defender.Build.ArmorClass, Attacker.Build.AttackBonus, AttackRoll)})";
     public string Damage => DamageRolls != null ? $"{string.Join('+', DamageRolls)} + {Attacker.Build.AttackBonus} = {DamageRolls.Sum() + Attacker.Build.DamageBonus}" : "N/A";
+
+    public int DamageDelt => DamageRolls == null ? 0 : (DamageRolls.Sum() + Attacker.Build.DamageBonus);
 }

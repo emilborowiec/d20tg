@@ -1,21 +1,21 @@
 ﻿@using d20TG.Features.Scenarios.State
 
-<div class="border rounded p-1">
-    <div class="flex flex-row">
-        <i>
-            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19A18.55 18.55 0 0 1 1 4l8-3 8 3a18.549 18.549 0 0 1-8 15Z"/>
-            </svg>
-        </i>
-        <span class="ml-2"> @DefenderBuildState.ArmorClass</span>
-    </div>
-    <div class="flex flex-row">
+<div class="rounded bg-blue-300 p-1 w-28 h-28 flex flex-col justify-center">
+    <div class="flex flex-row ml-2 mb-1">
         <i>
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 19">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4C5.5-1.5-1.5 5.5 4 11l7 7 7-7c5.458-5.458-1.542-12.458-7-7Z"/>
             </svg>
         </i>
         <span class="ml-2"> @DefenderBuildState.HitPoints</span>
+    </div>
+    <div class="flex flex-row ml-2">
+        <i>
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19A18.55 18.55 0 0 1 1 4l8-3 8 3a18.549 18.549 0 0 1-8 15Z"/>
+            </svg>
+        </i>
+        <span class="ml-2"> @DefenderBuildState.ArmorClass</span>
     </div>
 </div>
 

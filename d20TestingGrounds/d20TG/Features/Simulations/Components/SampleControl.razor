@@ -1,0 +1,45 @@
+﻿<div class="border rounded-xl p-2 flex flex-col items-center">
+    <div>
+        <label for="combat-runs"
+               class="block mb-2 text-sm font-medium text-gray-900">
+            Sample size
+        </label>
+        <input id="combat-runs"
+               type="number"
+               min="1"
+               max="100"
+               @bind="_sampleSize"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"/>
+    </div>
+    <div class="grow"/>
+    <button @onclick="HandleRerunClick"
+            class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
+        <i>
+            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
+            </svg>
+        </i>
+    </button>
+</div>
+
+@code {
+
+    private int _sampleSize;
+
+    [Parameter, EditorRequired]
+    public int InitialValue { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<int> OnRerunSampleClickCallback { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _sampleSize = InitialValue;
+    }
+
+    private async Task HandleRerunClick()
+    {
+        await OnRerunSampleClickCallback.InvokeAsync(_sampleSize);
+    }
+
+}

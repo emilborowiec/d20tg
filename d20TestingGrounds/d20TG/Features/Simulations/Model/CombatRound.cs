@@ -1,4 +1,4 @@
-﻿namespace d20TG.Features.Simulations;
+﻿namespace d20TG.Features.Simulations.Model;
 
 public class CombatRound
 {

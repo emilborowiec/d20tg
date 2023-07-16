@@ -1,6 +1,6 @@
 ﻿using d20TG.Features.Scenarios.State;
 
-namespace d20TG.Features.Simulations;
+namespace d20TG.Features.Simulations.Model;
 
 public class Defender
 {

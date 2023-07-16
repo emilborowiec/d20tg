@@ -1,0 +1,30 @@
+﻿@using d20TG.Features.Simulations.Model
+<table>
+    <thead>
+    <tr>
+        <th>Round</th>
+        <th>Attack roll</th>
+        <th>Damage roll</th>
+    </tr>
+    </thead>
+    @foreach (var round in SimulationRun.Rounds)
+    {
+        <tbody>
+        @foreach (var turn in round.Turns)
+        {
+            <tr>
+                <td rowspan="@round.Turns.Count">@(round.RoundNumber + 1)</td>
+                <td>@turn.Attack</td>
+                <td>@turn.Damage</td>
+            </tr>
+        }
+        </tbody>
+    }
+</table>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public SimulationRun SimulationRun { get; set; }
+
+}

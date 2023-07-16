@@ -1,102 +1,55 @@
-﻿@using d20TG.Domain
-@using d20TG.Features.Scenarios.Services
+﻿@using d20TG.Features.Scenarios.Services
 @using d20TG.Features.Scenarios.State
 @using d20TG.Features.Scenarios.Utils
-@using d20TG.Features.Simulations
+@using d20TG.Features.Simulations.Model
 @attribute [Route(MyRoutes.ScenarioSimulationRoute)]
 @inject ICombatScenarioRepository ScenarioRepository
 
 <PageTitle>Simulation | d20 Testing Grounds</PageTitle>
 
-<h2 class="text-4xl font-extrabold">Combat Scenario Simulation</h2>
+<h2 class="text-4xl font-medium mb-8">Scenario Simulation & Stats</h2>
 
-@if (_scenarioState != null)
-{
-    <h3 class="text-3xl font-bold">Scenario</h3>
-    <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
-
-    <div class="flex flex-row items-center bg-amber-200 p-2 my-4 border-b-1 border-t-1 border-gray-300">
-        <div>
-            <label for="combat-runs"
-                   class="block mb-2 text-sm font-medium text-gray-900">
-                Combat runs to simulate
-            </label>
-            <input id="combat-runs"
-                   type="number"
-                   min="1"
-                   max="100"
-                   @bind="RunCount"
-                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"/>
-        </div>
-        <div class="grow" />
-        <button @onclick="HandleRunSimulationsClick"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
-            Run Simulation
-        </button>
-    </div>
-
-    @for (var i = 0; i < _runs.Count; i++)
+<div class="grid grid-cols-2 gap-4">
+    @if (_scenarioState != null)
     {
-        var current = i;
+        <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
 
-        <Accordion Title="@($"Run: {current + 1} | Rounds taken: {_runs[current].Rounds.Count}")">
-            <table>
-                <thead>
-                <tr>
-                    <th>Round</th>
-                    <th>Attack roll</th>
-                    <th>Damage roll</th>
-                </tr>
-                </thead>
-                @foreach (var round in _runs[current].Rounds)
-                {
-                    <tbody>
-                    @foreach (var turn in round.Turns)
-                    {
-                        <tr>
-                            <td rowspan="@round.Turns.Count">@(round.RoundNumber + 1)</td>
-                            <td>@turn.Attack</td>
-                            <td>@turn.Damage</td>
-                        </tr>
-                    }
-                    </tbody>
-                }
-            </table>
-        </Accordion>
-    }
+        <SampleControl InitialValue="SampleSize" OnRerunSampleClickCallback="HandleRerunSampleClick" />
 
-    @if (_runs.Count > 0)
-    {
-        <h3 class="text-3xl font-bold">Rounds to beat distribution: </h3>
-        var roundsToBeatDistribution = GetRoundsToBeatDistribution(_runs);
-        foreach (var points in roundsToBeatDistribution)
+        @if (_runs.Count > 0)
         {
-            <p>@points.RunCount rounds: @points.RunCount runs</p>
-        }
-        
-        <ApexChart TItem="RoundsToBeatDataPoint"
-                   Title="Rounds to Beat">
-            <ApexPointSeries TItem="RoundsToBeatDataPoint"
-                             Items="roundsToBeatDistribution"
-                             Name="Simulations"
-                             XValue="@(e => e.RoundsToBeat)"
-                             YValue="@(e => e.RunCount)"
-                             SeriesType="SeriesType.Bar"/>
-        </ApexChart>
-    }
-}
-else
-{
-    <p>Scenario not found or expired!</p>
-}
+            <SimulationRunsView Runs="_runs" />
 
+            <h3 class="text-3xl font-bold">Rounds to beat distribution: </h3>
+            var roundsToBeatDistribution = GetRoundsToBeatDistribution(_runs);
+            foreach (var points in roundsToBeatDistribution)
+            {
+                <p>@points.RunCount rounds: @points.RunCount runs</p>
+            }
+
+            <ApexChart TItem="RoundsToBeatDataPoint"
+                       Title="Rounds to Beat">
+                <ApexPointSeries TItem="RoundsToBeatDataPoint"
+                                 Items="roundsToBeatDistribution"
+                                 Name="Simulations"
+                                 XValue="@(e => e.RoundsToBeat)"
+                                 YValue="@(e => e.RunCount)"
+                                 SeriesType="SeriesType.Bar"/>
+            </ApexChart>
+        }
+    }
+    else
+    {
+        <p>Scenario not found or expired!</p>
+    }
+</div>
 
 @code {
 
     [Parameter]
     public string? ScenarioId { get; set; }
 
-    public int RunCount { get; set; } = 20;
+    public int SampleSize { get; set; } = 20;
 
     private CombatScenarioState? _scenarioState;
     private List<SimulationRun> _runs = new();
@@ -104,13 +57,6 @@ else
     private static IEnumerable<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
     {
         return runs.GroupBy(x => x.Rounds.Count).Select(g => new RoundsToBeatDataPoint { TotalRunCount = runs.Count, RoundsToBeat = g.Key, RunCount = g.Count() });
-    }
-
-    private class RoundsToBeatDataPoint
-    {
-        public int RoundsToBeat { get; set; }
-        public int RunCount { get; set; }
-        public int TotalRunCount { get; set; }
     }
 
     protected override async Task OnParametersSetAsync()
@@ -127,74 +73,16 @@ else
         await base.OnParametersSetAsync();
     }
 
-    private class SimulationRun
+    private void HandleRerunSampleClick(int sampleSize)
     {
-        public List<CombatRound> Rounds { get; } = new();
-    }
-
-    private List<SimulationRun> RunSimulations(int runCount, CombatScenarioState combatScenarioState)
-    {
-        var runs = new List<SimulationRun>();
-        for (var i = 0; i < runCount; i++)
-        {
-            var run = RunSimulation(combatScenarioState);
-            runs.Add(run);
-        }
-        return runs;
-    }
-
-    private SimulationRun RunSimulation(CombatScenarioState combatScenarioState)
-    {
-        var run = new SimulationRun();
-        var roundNumber = 0;
-        var attackers = combatScenarioState.AttackerBuildStates.Select(x => new Attacker(x)).ToArray();
-        var defenders = combatScenarioState.DefenderBuildStates.Select(x => new Defender(x)).ToArray();
-        while (AnyoneAlive(defenders))
-        {
-            var round = new CombatRound(roundNumber);
-            run.Rounds.Add(round);
-            foreach (var attacker in attackers)
-            {
-                var target = FindLivingDefender(defenders);
-                var attackRoll = CombatSystem.RollD20();
-                var isHit = CombatSystem.IsHit(target.Build.ArmorClass, attacker.Build.AttackBonus, attackRoll);
-                var turn = new CombatTurn(attacker, target, attackRoll);
-                round.Turns.Add(turn);
-                if (isHit)
-                {
-                    var damage = CombatSystem.RollDamage(attacker.Build.DamageDiceState.DiceCount, attacker.Build.DamageBonus, attacker.Build.DamageDiceState.DiceType, out var damageRolls);
-                    target.CurrentHitPoints -= damage;
-                    turn.DamageRolls = damageRolls;
-                }
-                if (!AnyoneAlive(defenders))
-                {
-                    break;
-                }
-            }
-            roundNumber++;
-        }
-
-        return run;
-    }
-
-    private static Defender FindLivingDefender(IEnumerable<Defender> defenders)
-    {
-        return defenders.First(x => x.Alive);
-    }
-
-    private static bool AnyoneAlive(IEnumerable<Defender> defenders)
-    {
-        return defenders.Any(defender => defender.Alive);
-    }
-
-    private void HandleRunSimulationsClick()
-    {
+        SampleSize = sampleSize;
         if (_scenarioState == null)
         {
             return;
         }
 
-        _runs = RunSimulations(RunCount, _scenarioState.Value);
+        _runs = CombatSimulator.RunSimulations(SampleSize, _scenarioState.Value);
     }
 
 }
+

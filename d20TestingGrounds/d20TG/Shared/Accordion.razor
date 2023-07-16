@@ -2,7 +2,7 @@
     <h4>
         <button type="button"
                 @onclick="HandleButtonClick"
-                class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                class="flex items-center justify-between w-full p-1 font-medium text-left text-gray-500 border @(Collapsed ? "" : "border-b-0") border-gray-200 hover:bg-gray-100"
                 aria-expanded="true"
                 aria-controls="accordion-collapse-body">
             <span>@Title</span>
@@ -15,7 +15,7 @@
     </h4>
     @if (!Collapsed)
     {
-        <div>
+        <div class="border border-t-0">
             @ChildContent
         </div>
     }
