@@ -19,23 +19,7 @@
         @if (_runs.Count > 0)
         {
             <SimulationRunsView Runs="_runs" />
-
-            <h3 class="text-3xl font-bold">Rounds to beat distribution: </h3>
-            var roundsToBeatDistribution = GetRoundsToBeatDistribution(_runs);
-            foreach (var points in roundsToBeatDistribution)
-            {
-                <p>@points.RunCount rounds: @points.RunCount runs</p>
-            }
-
-            <ApexChart TItem="RoundsToBeatDataPoint"
-                       Title="Rounds to Beat">
-                <ApexPointSeries TItem="RoundsToBeatDataPoint"
-                                 Items="roundsToBeatDistribution"
-                                 Name="Simulations"
-                                 XValue="@(e => e.RoundsToBeat)"
-                                 YValue="@(e => e.RunCount)"
-                                 SeriesType="SeriesType.Bar"/>
-            </ApexChart>
+            <RoundsToBeatView Runs="_runs" />
         }
     }
     else
@@ -53,11 +37,6 @@
 
     private CombatScenarioState? _scenarioState;
     private List<SimulationRun> _runs = new();
-
-    private static IEnumerable<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
-    {
-        return runs.GroupBy(x => x.Rounds.Count).Select(g => new RoundsToBeatDataPoint { TotalRunCount = runs.Count, RoundsToBeat = g.Key, RunCount = g.Count() });
-    }
 
     protected override async Task OnParametersSetAsync()
     {

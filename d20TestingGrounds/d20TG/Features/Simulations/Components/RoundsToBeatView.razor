@@ -1,0 +1,38 @@
+﻿@using d20TG.Features.Simulations.Model
+
+<div class="border rounded-xl p-4">
+    <h4 class="text-2xl mb-2 text-center">Rounds to beat distribution</h4>
+    
+    <ApexChart @ref="_chart" 
+               TItem="RoundsToBeatDataPoint"
+               Title="Rounds to Beat">
+        <ApexPointSeries TItem="RoundsToBeatDataPoint"
+                         Items="GetRoundsToBeatDistribution(Runs)"
+                         Name="Simulations"
+                         XValue="@(e => e.RoundsToBeat)"
+                         YValue="@(e => e.RunCount)"
+                         SeriesType="SeriesType.Bar"/>
+    </ApexChart>
+</div>
+
+@code {
+    private ApexChart<RoundsToBeatDataPoint>? _chart;
+    
+    [Parameter, EditorRequired]
+    public List<SimulationRun> Runs { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_chart != null)
+        {
+            await _chart.UpdateSeriesAsync();
+            await _chart.RenderAsync();
+        }
+    }
+
+    private static IEnumerable<RoundsToBeatDataPoint> GetRoundsToBeatDistribution(ICollection<SimulationRun> runs)
+    {
+        return runs.GroupBy(x => x.Rounds.Count).Select(g => new RoundsToBeatDataPoint { TotalRunCount = runs.Count, RoundsToBeat = g.Key, RunCount = g.Count() });
+    }
+
+}

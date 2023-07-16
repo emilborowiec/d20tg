@@ -1,13 +1,13 @@
 ﻿@using d20TG.Features.Simulations.Model
 
 <div class="border rounded-xl p-4">
-    <h4 class="text-2xl">Simulation Runs</h4>
+    <h4 class="text-2xl mb-2 text-center">Simulation Runs</h4>
     
     @for (var i = 0; i < Runs.Count; i++)
     {
         var current = i;
 
-        <Accordion Title="@($"#{current + 1} | Rounds taken: {Runs[current].Rounds.Count} | DPR: {Runs[current].DamagePerRound}")">
+        <Accordion Title="@($"#{current + 1} | Rounds taken: {Runs[current].Rounds.Count} | DPR: {Runs[current].DamagePerRound:f2}")">
             <CombatSimulationCourse SimulationRun="Runs[current]"/>
         </Accordion>
     }
@@ -15,17 +15,7 @@
 
 @code {
 
-    private List<SimulationRun> _runs;
-    
     [Parameter, EditorRequired]
-    public List<SimulationRun> Runs
-    {
-        get => _runs;
-        set
-        {
-            _runs = value;
-            _runs = _runs.OrderBy(x => x.Rounds.Count).ToList();
-        }
-    }
+    public List<SimulationRun> Runs { get; set; }
     
 }
