@@ -4,7 +4,8 @@
     <h4 class="text-2xl mb-2 text-center">Rounds-To-Beat (distribution)</h4>
     
     <ApexChart @ref="_chart" 
-               TItem="RoundsToBeatDataPoint">
+               TItem="RoundsToBeatDataPoint"
+               Options="_options">
         <ApexPointSeries TItem="RoundsToBeatDataPoint"
                          Items="_dataPoints"
                          Name="Run Count"
@@ -18,9 +19,27 @@
 @code {
     private ApexChart<RoundsToBeatDataPoint>? _chart;
     private List<RoundsToBeatDataPoint> _dataPoints = new ();
+    private ApexChartOptions<RoundsToBeatDataPoint> _options = new();
 
     [Parameter, EditorRequired]
     public List<SimulationRun> Runs { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        _options.Xaxis = new XAxis
+        {
+            Title = new AxisTitle { Text = "Rounds to beat all defenders", OffsetY = 80 }
+        };
+        
+        _options.Yaxis = new List<YAxis>
+        {
+            new()
+            {
+                Title = new AxisTitle { Text = "Run Count" },
+                DecimalsInFloat = 2
+            }
+        };
+    }
 
     protected override async Task OnParametersSetAsync()
     {

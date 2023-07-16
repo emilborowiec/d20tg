@@ -5,7 +5,6 @@
 
     <ApexChart @ref="_chart"
                TItem="SimulationRun"
-               Title="Damage per round"
                Options="_options">
         <ApexPointSeries TItem="SimulationRun"
                          Items="_sortedRuns"
@@ -26,12 +25,19 @@
 
     protected override void OnInitialized()
     {
-        _options.Yaxis = new List<YAxis>();
-        _options.Yaxis.Add(new YAxis
+        _options.Xaxis = new XAxis
         {
-            DecimalsInFloat = 2,
-            
-        });
+            Title = new AxisTitle { Text = "Run number", OffsetY = 80 },
+        };
+        
+        _options.Yaxis = new List<YAxis>
+        {
+            new()
+            {
+                DecimalsInFloat = 2,
+                Title = new AxisTitle { Text = "Damage per round" }
+            }
+        };
     }
 
     protected override async Task OnParametersSetAsync()
