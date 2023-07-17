@@ -1,30 +1,30 @@
 ﻿@using d20TG.Features.Simulations.Model
-<table>
-    <thead>
-    <tr>
-        <th>Round</th>
-        <th>Attack roll</th>
-        <th>Damage roll</th>
-    </tr>
-    </thead>
+
+<div>
     @foreach (var round in SimulationRun.Rounds)
     {
-        <tbody>
-        @foreach (var turn in round.Turns)
-        {
-            <tr>
-                <td rowspan="@round.Turns.Count">@(round.RoundNumber + 1)</td>
-                <td>@turn.Attack</td>
-                <td>@turn.Damage</td>
-            </tr>
-        }
-        </tbody>
+        <h6 class="text-lg">Round @(round.RoundNumber+1)</h6>
+        <ul>
+            @foreach (var turn in round.Turns)
+            {
+                <li>
+                    <span class="font-medium" style="color: @turn.Attacker.Build.ColorHex">@turn.Attacker.Build.Label</span>
+                    <Tooltip Text="@turn.Attack"><span class="font-bold">@(turn.IsHit ? "hits" : "misses")</span></Tooltip>
+                    <span class="font-medium" style="color: @turn.Defender.Build.ColorHex">@turn.Defender.Build.Label</span>
+                    @if (turn.IsHit)
+                    {
+                        <span> for </span>
+                        <Tooltip Text="@turn.Damage"><span class="font-bold">@turn.DamageDelt</span></Tooltip>
+                        <span> damage </span>
+                    }
+                </li>
+            }
+        </ul>
     }
-</table>
+</div>
 
 @code {
 
     [Parameter, EditorRequired]
     public SimulationRun SimulationRun { get; set; }
-
 }
