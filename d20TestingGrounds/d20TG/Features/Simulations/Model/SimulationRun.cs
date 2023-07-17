@@ -23,4 +23,20 @@ public class SimulationRun
         }
     }
 
+    public static decimal CalculateRoundsToBeatGrandAverage(List<SimulationRun> runs)
+    {
+        var allRounds = runs.SelectMany(x => x.Rounds).ToList();
+        return (decimal)allRounds.Count / runs.Count;
+    }
+
+    public static decimal CalculateDamagePerRoundGrandAverage(List<SimulationRun> runs)
+    {
+        return runs.Sum(x => x.DamagePerRound) / runs.Count;
+    }
+
+    public static decimal CalculateAccuracyGrandAverage(List<SimulationRun> runs)
+    {
+        return runs.Sum(x => x.Accurracy) / runs.Count;
+    }
+
 }

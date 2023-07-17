@@ -1,0 +1,40 @@
+﻿@using d20TG.Features.Simulations.Model
+
+<div class="border rounded-xl p-4">
+    <h4 class="text-2xl mb-2 text-center">Averages</h4>
+
+    <div class="grid grid-cols-3 gap-2">
+        <div class="bg-blue-300 flex flex-col items-center p-1 rounded">
+            <div>RTB</div>
+            <div>@($"{_averageRoundsToBeat:f2}")</div>
+        </div>
+        <div class="bg-blue-300 flex flex-col items-center p-1 rounded">
+            <div>DPR</div>
+            <div>@($"{_averageDamagePerRound:f2}")</div>
+
+        </div>
+        <div class="bg-blue-300 flex flex-col items-center p-1 rounded">
+            <div>Acc</div>
+            <div>@($"{_averageAccurracy:f2}")</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private decimal _averageRoundsToBeat;
+    private decimal _averageDamagePerRound;
+    private decimal _averageAccurracy;
+
+    [Parameter, EditorRequired]
+    public List<SimulationRun> Runs { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _averageRoundsToBeat = SimulationRun.CalculateRoundsToBeatGrandAverage(Runs);
+        _averageDamagePerRound = SimulationRun.CalculateDamagePerRoundGrandAverage(Runs);
+        _averageAccurracy = SimulationRun.CalculateAccuracyGrandAverage(Runs);
+    }
+    
+    
+
+}

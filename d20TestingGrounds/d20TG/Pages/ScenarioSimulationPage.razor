@@ -22,6 +22,9 @@
         @if (_runs.Count > 0)
         {
             <div class="mb-4 break-inside-avoid">
+                <AveragesView Runs="_runs"/>
+            </div>
+            <div class="mb-4 break-inside-avoid">
                 <SimulationRunsView Runs="_runs"/>
             </div>
             <div class="mb-4 break-inside-avoid">
