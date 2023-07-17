@@ -13,12 +13,12 @@ public static class CombatScenarioMappers
 
     public static AttackerBuildState ToReadOnlyState(this AttackerLabeledBuild model)
     {
-        return new AttackerBuildState(model.Label, model.ColorHex, model.AttackBonus, model.DamageBonus, model.DamageDice.ToReadOnlyState());
+        return new AttackerBuildState(model.Id, model.Label, model.ColorHex, model.AttackBonus, model.DamageBonus, model.DamageDice.ToReadOnlyState());
     }
 
     public static DefenderBuildState ToReadOnlyState(this DefenderLabeledBuild model)
     {
-        return new DefenderBuildState(model.Label, model.ColorHex, model.ArmorClass, model.HitPoints);
+        return new DefenderBuildState(model.Id, model.Label, model.ColorHex, model.ArmorClass, model.HitPoints);
     }
 
     public static CombatScenarioState ToReadOnlyState(this CombatScenario model)

@@ -10,13 +10,19 @@
                @bind="_model.Name"
                class="bg-gray-50 border border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"/>
     </div>
-    <div class="mb-2">
+    <div class="mb-2 overflow-x-hidden">
         <h3 class="text-3xl">Defenders</h3>
-        <Defenders DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange"/>
+        <Defenders DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates" 
+                   OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange"
+                   OnDefenderAddClickCallback="HandleAddDefenderClick"
+                   OnDefenderDeleteClickCallback="HandleDeleteDefenderClick"/>
     </div>
     <div class="mb-2">
         <h3 class="text-3xl">Attackers</h3>
-        <Attackers AttackerBuilds="@_model.ToReadOnlyState().AttackerBuildStates" OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange"/>
+        <Attackers AttackerBuilds="@_model.ToReadOnlyState().AttackerBuildStates" 
+                   OnAttackerBuildStateChangeCallback="HandleAttackerBuildStateChange"
+                   OnAttackerAddClickCallback="HandleAddAttackerClick"
+                   OnAttackerDeleteClickCallback="HandleDeleteAttackerClick"/>
     </div>
 
     <button @onclick="HandleSaveAndRunClickAsync"
@@ -44,12 +50,12 @@
 
     private void HandleDefenderBuildStateChange(DefenderBuildState defenderBuildState)
     {
-        _model.DefenderBuilds[0].UpdateDefenderFromReadOnlyState(defenderBuildState);
+        _model.DefenderBuilds.First(x => x.Id == defenderBuildState.Id).UpdateDefenderFromReadOnlyState(defenderBuildState);
     }
 
     private void HandleAttackerBuildStateChange(AttackerBuildState attackerBuildState)
     {
-        _model.AttackerBuilds[0].UpdateAttackerFromReadOnlyState(attackerBuildState);
+        _model.AttackerBuilds.First(x => x.Id == attackerBuildState.Id).UpdateAttackerFromReadOnlyState(attackerBuildState);
     }
 
     private async Task HandleSaveAndRunClickAsync()
@@ -65,6 +71,26 @@
     private void HandleDiscardClickAsync()
     {
         MyNavigation.NavigateToHome();
+    }
+
+    private void HandleAddAttackerClick()
+    {
+        _model.AttackerBuilds.Add(new AttackerLabeledBuild(Guid.NewGuid().ToString()));
+    }
+
+    private void HandleAddDefenderClick()
+    {
+        _model.DefenderBuilds.Add(new DefenderLabeledBuild(Guid.NewGuid().ToString()));
+    }
+
+    private void HandleDeleteAttackerClick(string id)
+    {
+        _model.AttackerBuilds.Remove(_model.AttackerBuilds.First(x => x.Id == id));
+    }
+
+    private void HandleDeleteDefenderClick(string id)
+    {
+        _model.DefenderBuilds.Remove(_model.DefenderBuilds.First(x => x.Id == id));
     }
 
 }

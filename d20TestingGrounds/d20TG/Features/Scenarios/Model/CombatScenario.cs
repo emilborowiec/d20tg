@@ -6,13 +6,16 @@ namespace d20TG.Features.Scenarios.Model;
 
 public class CombatScenario : IValidatableObject
 {
+    public const string FirstDefenderId = "defender 1";
+    public const string FirstAttackerId = "attacker 1";
+    
     [MinLength(1)]
     [MaxLength(255)]
     public string Name { get; set; } = "New Scenario";
     [JsonInclude]
-    public List<DefenderLabeledBuild> DefenderBuilds { get; private set; } = new() { new DefenderLabeledBuild() };
+    public List<DefenderLabeledBuild> DefenderBuilds { get; private set; } = new() { new DefenderLabeledBuild(FirstDefenderId) };
     [JsonInclude]
-    public List<AttackerLabeledBuild> AttackerBuilds { get; private set; } = new() { new AttackerLabeledBuild() };
+    public List<AttackerLabeledBuild> AttackerBuilds { get; private set; } = new() { new AttackerLabeledBuild(FirstAttackerId) };
 
     public override string ToString()
     {
