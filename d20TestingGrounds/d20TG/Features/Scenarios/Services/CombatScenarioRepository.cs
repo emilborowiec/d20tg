@@ -14,19 +14,19 @@ public class CombatScenarioRepository : ICombatScenarioRepository
         _localStorage = localStorage;
     }
 
-    public async Task<string[]> GetAllScenarioIdsAsync()
+    public async Task<CombatScenarioId[]> GetAllScenarioIdsAsync()
     {
         var storageInitialized = await _localStorage.ContainKeyAsync(ScenariosStorageKey);
         if (!storageInitialized)
         {
-            return Array.Empty<string>();
+            return Array.Empty<CombatScenarioId>();
         }
 
         try
         {
             var scenarios =
                 await _localStorage.GetItemAsync<Dictionary<string, CombatScenario>>(ScenariosStorageKey);
-            return scenarios.Keys.ToArray();
+            return scenarios.Select(kvp => new CombatScenarioId {Id = kvp.Key, Name = kvp.Value.Name}).ToArray();
         }
         catch (Exception e)
         {

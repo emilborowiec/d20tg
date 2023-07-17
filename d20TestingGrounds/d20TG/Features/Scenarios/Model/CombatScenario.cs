@@ -6,6 +6,9 @@ namespace d20TG.Features.Scenarios.Model;
 
 public class CombatScenario : IValidatableObject
 {
+    [MinLength(1)]
+    [MaxLength(255)]
+    public string Name { get; set; } = "New Scenario";
     [JsonInclude]
     public List<DefenderBuild> DefenderBuilds { get; private set; } = new() { new DefenderBuild() };
     [JsonInclude]

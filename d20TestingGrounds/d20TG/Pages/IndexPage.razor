@@ -1,6 +1,4 @@
 ﻿@page "/"
-@using d20TG.Features.Scenarios.Services
-@inject ICombatScenarioRepository ScenarioRepository
 
 <PageTitle>d20 Testing Grounds</PageTitle>
 
@@ -13,15 +11,5 @@
     <SavedScenariosView />
 </div>
 
-
 @code {
-    private string[]? _scenarioIds;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-
-        _scenarioIds = await ScenarioRepository.GetAllScenarioIdsAsync();
-    }
-
 }

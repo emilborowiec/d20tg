@@ -4,7 +4,7 @@ namespace d20TG.Features.Scenarios.Services;
 
 public interface ICombatScenarioRepository
 {
-    Task<string[]> GetAllScenarioIdsAsync();
+    Task<CombatScenarioId[]> GetAllScenarioIdsAsync();
 
     Task<string> SaveScenarioAsync(CombatScenario combatScenarioState);
     Task<CombatScenario> LoadScenarioAsync(string guid);

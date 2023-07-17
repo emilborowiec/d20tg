@@ -1,19 +1,20 @@
 ﻿@using d20TG.Features.Scenarios.Services
+@using d20TG.Features.Scenarios.Model
 @inject ICombatScenarioRepository ScenarioRepository
 
 <div>
     @if (_scenarioIds != null && _scenarioIds.Length > 0)
     {
         <div>
-            @foreach (var id in _scenarioIds)
+            @foreach (var scenarioId in _scenarioIds)
             {
                 <div class="border rounded p-4 flex flex-row w-full items-center">
-                    <a href="/scenario-simulation/@id"
+                    <a href="/scenario-simulation/@scenarioId.Id"
                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline flex-grow">
-                        @id
+                        @scenarioId.Name
                     </a>
                     <button type="button"
-                            @onclick="@(() => HandleDeleteClickAsync(id))"
+                            @onclick="@(() => HandleDeleteClickAsync(scenarioId.Id))"
                             class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                             <path d="M17 4h-4V2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H1a1 1 0 0 0 0 2h1v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1a1 1 0 1 0 0-2ZM7 2h4v2H7V2Zm1 14a1 1 0 1 1-2 0V8a1 1 0 0 1 2 0v8Zm4 0a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v8Z"/>
@@ -34,7 +35,7 @@
 </div>
 
 @code {
-    private string[]? _scenarioIds;
+    private CombatScenarioId[]? _scenarioIds;
 
     protected override async Task OnInitializedAsync()
     {

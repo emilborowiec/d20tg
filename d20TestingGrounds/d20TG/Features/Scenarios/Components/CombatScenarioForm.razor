@@ -5,6 +5,12 @@
 
 <div>
     <div class="mb-2">
+        <h3 class="text-3xl">Name</h3>
+        <input type="text"
+               @bind="_model.Name"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"/>
+    </div>
+    <div class="mb-2">
         <h3 class="text-3xl">Defenders</h3>
         <Defenders DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates" OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChange"/>
     </div>
