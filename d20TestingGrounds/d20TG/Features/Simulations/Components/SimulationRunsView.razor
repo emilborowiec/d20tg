@@ -5,7 +5,7 @@
     
     @foreach (var run in Runs)
     {
-        <Accordion Title="@($"#{run.Id} | Rounds taken: {run.Rounds.Count} | DPR: {run.DamagePerRound:f2}")">
+        <Accordion Title="@($"#{run.Id} | Rounds taken: {run.Rounds.Count} | DPR: {run.DamagePerRound:f2} | Acc: {run.Accurracy:f2}")">
             <CombatSimulationCourse SimulationRun="run"/>
         </Accordion>
     }

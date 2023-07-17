@@ -18,8 +18,10 @@ public class CombatTurn
     public int DefenderHitPoints { get; set; }
 
     public string Defence => $"{Defender.Build.ArmorClass}";
-    public string Attack => $"{AttackRoll} + {Attacker.Build.AttackBonus} = {AttackRoll + Attacker.Build.AttackBonus} ({CombatSystem.IsHit(Defender.Build.ArmorClass, Attacker.Build.AttackBonus, AttackRoll)})";
+    public string Attack => $"{AttackRoll} + {Attacker.Build.AttackBonus} = {AttackRoll + Attacker.Build.AttackBonus} ({IsHit})";
     public string Damage => DamageRolls != null ? $"{string.Join('+', DamageRolls)} + {Attacker.Build.AttackBonus} = {DamageRolls.Sum() + Attacker.Build.DamageBonus}" : "N/A";
+
+    public bool IsHit => CombatSystem.IsHit(Defender.Build.ArmorClass, Attacker.Build.AttackBonus, AttackRoll);
 
     public int DamageDelt => DamageRolls == null ? 0 : (DamageRolls.Sum() + Attacker.Build.DamageBonus);
 }

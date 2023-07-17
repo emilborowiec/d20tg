@@ -9,18 +9,30 @@
 
 <h2 class="text-4xl font-medium mb-8">Scenario Simulation & Stats</h2>
 
-<div class="grid grid-cols-2 gap-4">
+<div class="columns-2 gap-4">
     @if (_scenarioState != null)
     {
-        <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
-
-        <SampleControl InitialValue="SampleSize" OnRerunSampleClickCallback="HandleRerunSampleClick" />
+        <div class="mb-4 break-inside-avoid">
+            <CombatScenarioStateView ScenarioState="@_scenarioState.Value"/>
+        </div>
+        <div class="mb-4 break-inside-avoid">
+            <SampleControl InitialValue="SampleSize" OnRerunSampleClickCallback="HandleRerunSampleClick"/>
+        </div>
 
         @if (_runs.Count > 0)
         {
-            <SimulationRunsView Runs="_runs" />
-            <RoundsToBeatView Runs="_runs" />
-            <DamagePerRoundView Runs="_runs" />
+            <div class="mb-4 break-inside-avoid">
+                <SimulationRunsView Runs="_runs"/>
+            </div>
+            <div class="mb-4 break-inside-avoid">
+                <RoundsToBeatView Runs="_runs"/>
+            </div>
+            <div class="mb-4 break-inside-avoid">
+                <DamagePerRoundView Runs="_runs"/>
+            </div>
+            <div class="mb-4 break-inside-avoid">
+                <AccuracyView Runs="_runs"/>
+            </div>
         }
     }
     else
@@ -65,4 +77,3 @@
     }
 
 }
-

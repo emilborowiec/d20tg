@@ -12,4 +12,15 @@ public class SimulationRun
 
     public int TotalDamage => Rounds.Sum(x => x.Turns.Sum(t => t.DamageDelt));
     public decimal DamagePerRound => (decimal)TotalDamage / Rounds.Count;
+
+    public decimal Accurracy
+    {
+        get
+        {
+            var allTurns = Rounds.SelectMany(x => x.Turns).ToList();
+            var hitTurns = allTurns.Where(x => x.IsHit).ToList();
+            return (hitTurns.Count * 100m) / allTurns.Count;
+        }
+    }
+
 }
