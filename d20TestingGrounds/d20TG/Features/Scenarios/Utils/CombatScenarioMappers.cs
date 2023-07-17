@@ -1,8 +1,6 @@
 ﻿using d20TG.Features.Scenarios.Model;
 using d20TG.Features.Scenarios.State;
-using AttackerBuild = d20TG.Domain.AttackerBuild;
 using DamageDice = d20TG.Domain.DamageDice;
-using DefenderBuild = d20TG.Domain.DefenderBuild;
 
 namespace d20TG.Features.Scenarios.Utils;
 
@@ -13,14 +11,14 @@ public static class CombatScenarioMappers
         return new DamageDiceState(model.DiceCount, model.DiceType);
     }
 
-    public static AttackerBuildState ToReadOnlyState(this AttackerBuild model)
+    public static AttackerBuildState ToReadOnlyState(this AttackerLabeledBuild model)
     {
-        return new AttackerBuildState(model.AttackBonus, model.DamageBonus, model.DamageDice.ToReadOnlyState());
+        return new AttackerBuildState(model.Label, model.ColorHex, model.AttackBonus, model.DamageBonus, model.DamageDice.ToReadOnlyState());
     }
 
-    public static DefenderBuildState ToReadOnlyState(this DefenderBuild model)
+    public static DefenderBuildState ToReadOnlyState(this DefenderLabeledBuild model)
     {
-        return new DefenderBuildState(model.ArmorClass, model.HitPoints);
+        return new DefenderBuildState(model.Label, model.ColorHex, model.ArmorClass, model.HitPoints);
     }
 
     public static CombatScenarioState ToReadOnlyState(this CombatScenario model)
@@ -35,14 +33,18 @@ public static class CombatScenarioMappers
     }
     
         
-    public static void UpdateDefenderFromReadOnlyState(this DefenderBuild defenderBuild, DefenderBuildState defenderBuildState)
+    public static void UpdateDefenderFromReadOnlyState(this DefenderLabeledBuild defenderBuild, DefenderBuildState defenderBuildState)
     {
+        defenderBuild.Label = defenderBuildState.Label;
+        defenderBuild.ColorHex = defenderBuildState.ColorHex;
         defenderBuild.ArmorClass = defenderBuildState.ArmorClass;
         defenderBuild.HitPoints = defenderBuildState.HitPoints;
     }
 
-    public static void UpdateAttackerFromReadOnlyState(this AttackerBuild attackerBuild, AttackerBuildState attackerBuildState)
+    public static void UpdateAttackerFromReadOnlyState(this AttackerLabeledBuild attackerBuild, AttackerBuildState attackerBuildState)
     {
+        attackerBuild.Label = attackerBuildState.Label;
+        attackerBuild.ColorHex = attackerBuildState.ColorHex;
         attackerBuild.AttackBonus = attackerBuildState.AttackBonus;
         attackerBuild.DamageBonus = attackerBuildState.DamageBonus;
         attackerBuild.DamageDice.UpdateFromReadOnlyState(attackerBuildState.DamageDiceState);

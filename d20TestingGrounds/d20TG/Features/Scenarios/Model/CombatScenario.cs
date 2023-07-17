@@ -10,9 +10,9 @@ public class CombatScenario : IValidatableObject
     [MaxLength(255)]
     public string Name { get; set; } = "New Scenario";
     [JsonInclude]
-    public List<DefenderBuild> DefenderBuilds { get; private set; } = new() { new DefenderBuild() };
+    public List<DefenderLabeledBuild> DefenderBuilds { get; private set; } = new() { new DefenderLabeledBuild() };
     [JsonInclude]
-    public List<AttackerBuild> AttackerBuilds { get; private set; } = new() { new AttackerBuild() };
+    public List<AttackerLabeledBuild> AttackerBuilds { get; private set; } = new() { new AttackerLabeledBuild() };
 
     public override string ToString()
     {

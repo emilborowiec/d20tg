@@ -2,6 +2,20 @@
 <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <div class="grid gap-6 mb-6 md:grid-cols-1">
         <label class="block text-sm font-medium text-gray-900 dark:text-white">
+            Label
+            <input type="text" 
+                   value="@State.Label" 
+                   @onchange="HandleLabelChangeAsync"
+                   class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        </label>
+        <label class="block text-sm font-medium text-gray-900 dark:text-white">
+            Color
+            <input type="color" 
+                   value="@State.ColorHex" 
+                   @onchange="HandleColorChangeAsync"
+                   class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full" />
+        </label>
+        <label class="block text-sm font-medium text-gray-900 dark:text-white">
             Hit Points
             <input type="number"
                    min="0" 
@@ -44,6 +58,16 @@
         {
             await OnDefenderBuildStateChangeCallback.InvokeAsync(State with { ArmorClass = value });
         }
+    }
+
+    private async Task HandleLabelChangeAsync(ChangeEventArgs eventArgs)
+    {
+        await OnDefenderBuildStateChangeCallback.InvokeAsync(State with { Label = eventArgs.Value as string ?? "Defender" });
+    }
+
+    private async Task HandleColorChangeAsync(ChangeEventArgs eventArgs)
+    {
+        await OnDefenderBuildStateChangeCallback.InvokeAsync(State with { ColorHex = eventArgs.Value as string ?? "#0000FF" });
     }
 
 }
