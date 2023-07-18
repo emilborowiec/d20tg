@@ -1,0 +1,38 @@
+/* /Shared/MainLayout.razor.rz.scp.css */
+/* /Shared/Tooltip.razor.rz.scp.css */
+.tooltip-wrapper[b-x1u7mhgac9] {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor: help;
+}
+
+span[b-x1u7mhgac9] {
+    visibility: hidden;
+    position: absolute;
+    width: 120px;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    background-color: #363636;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    z-index: 1;
+}
+
+span[b-x1u7mhgac9]::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip-wrapper:hover span[b-x1u7mhgac9] {
+    visibility: visible;
+}
