@@ -3,7 +3,7 @@
 <div>
     @foreach (var round in SimulationRun.Rounds)
     {
-        <h6 class="text-lg">Round @(round.RoundNumber+1)</h6>
+        <h6 class="text-lg">Round @(round.RoundNumber + 1)</h6>
         <ul>
             @foreach (var turn in round.Turns)
             {
@@ -26,5 +26,6 @@
 @code {
 
     [Parameter, EditorRequired]
-    public SimulationRun SimulationRun { get; set; }
+    public SimulationRun SimulationRun { get; set; } = null!;
+
 }

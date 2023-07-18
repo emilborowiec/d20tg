@@ -24,16 +24,13 @@
 @code {
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
     public bool Collapsed { get; set; } = true;
 
     [Parameter]
-    public string Title { get; set; }
-
-    [Parameter]
-    public string Value { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     void Toggle()
     {

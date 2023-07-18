@@ -28,7 +28,7 @@
     [Parameter, EditorRequired]
     public List<SimulationRun> Runs { get; set; } = new();
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         _averageRoundsToBeat = SimulationRun.CalculateRoundsToBeatGrandAverage(Runs);
         _averageDamagePerRound = SimulationRun.CalculateDamagePerRoundGrandAverage(Runs);
