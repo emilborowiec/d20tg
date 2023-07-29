@@ -6,23 +6,23 @@ namespace d20TG.Features.Simulations.Model;
 public static class CombatSimulator
 {
 
-    public static List<SimulationRun> RunSimulations(int runCount, CombatScenarioState combatScenarioState)
+    public static List<SimulationRun> RunSimulations(int runCount, ScenarioState scenarioState)
     {
         var runs = new List<SimulationRun>();
         for (var i = 0; i < runCount; i++)
         {
-            var run = RunSimulation(i+1, combatScenarioState);
+            var run = RunSimulation(i+1, scenarioState);
             runs.Add(run);
         }
         return runs;
     }
 
-    private static SimulationRun RunSimulation(int runId, CombatScenarioState combatScenarioState)
+    private static SimulationRun RunSimulation(int runId, ScenarioState scenarioState)
     {
         var run = new SimulationRun(runId);
         var roundNumber = 0;
-        var attackers = combatScenarioState.AttackerBuildStates.Select(x => new Attacker(x)).ToArray();
-        var defenders = combatScenarioState.DefenderBuildStates.Select(x => new Defender(x)).ToArray();
+        var attackers = scenarioState.AttackerBuildStates.Select(x => new Attacker(x)).ToArray();
+        var defenders = scenarioState.DefenderBuildStates.Select(x => new Defender(x)).ToArray();
         while (AnyoneAlive(defenders))
         {
             var round = new CombatRound(roundNumber);

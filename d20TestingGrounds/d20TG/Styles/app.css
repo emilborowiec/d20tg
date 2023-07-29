@@ -15,3 +15,8 @@ h1:focus {
     from { background: lightYellow; }
     to   { background: white; }
 }
+
+input.invalid {
+    border-color: red;
+    border-width: 2px;
+}

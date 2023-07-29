@@ -1,0 +1,80 @@
+﻿@attribute [Route(MyRoutes.NewScenarioRoute)]
+@using System.ComponentModel.DataAnnotations
+@using d20TG.Features.Scenarios.Model
+@using d20TG.Features.Scenarios.Services
+@implements IDisposable
+@inject IMyNavigationManager MyNavigation
+@inject IScenarioRepository ScenarioRepository
+
+<EditForm EditContext="@_editContext" OnValidSubmit="@HandleValidSubmitAsync">
+    <h2 class="text-4xl">New Scenario</h2>
+
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="mb-2">
+        <h3 class="text-3xl">Name</h3>
+        <InputText @bind-Value="_model.Name"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"/>
+    </div>
+
+    <button type="submit"
+            disabled="@_formInvalid"
+            class="text-white bg-blue-700 disabled:bg-gray-300 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Save
+    </button>
+    <button @onclick="HandleDiscardClickAsync"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+        Discard
+    </button>
+</EditForm>
+
+@code {
+    private NewScenarioFromModel _model = null!;
+    private EditContext? _editContext;
+    private bool _formInvalid = false;
+
+    protected override void OnInitialized()
+    {
+        _model = new NewScenarioFromModel();
+        _editContext = new EditContext(_model);
+        _editContext.OnFieldChanged += HandleFieldChanged;
+    }
+    
+    public void Dispose()
+    {
+        if (_editContext is not null)
+        {
+            _editContext.OnFieldChanged -= HandleFieldChanged;
+        }
+    }
+
+    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (_editContext is not null)
+        {
+            _formInvalid = !_editContext.Validate();
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+        var newScenario = new Scenario(Guid.NewGuid().ToString())
+        {
+            Name = _model.Name
+        };
+        await ScenarioRepository.SaveScenarioAsync(newScenario);
+        MyNavigation.NavigateToScenario(newScenario.Id);
+    }
+
+    private void HandleDiscardClickAsync()
+    {
+        MyNavigation.NavigateToHome();
+    }
+
+    public class NewScenarioFromModel
+    {
+        [MinLength(1), MaxLength(100)]
+        public string Name { get; set; } = "New Scenario";
+    }
+}

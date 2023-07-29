@@ -4,7 +4,7 @@ using DamageDice = d20TG.Domain.DamageDice;
 
 namespace d20TG.Features.Scenarios.Utils;
 
-public static class CombatScenarioMappers
+public static class ScenarioMappers
 {
     public static DamageDiceState ToReadOnlyState(this DamageDice model)
     {
@@ -21,9 +21,9 @@ public static class CombatScenarioMappers
         return new DefenderBuildState(model.Id, model.Label, model.ColorHex, model.ArmorClass, model.HitPoints);
     }
 
-    public static CombatScenarioState ToReadOnlyState(this CombatScenario model)
+    public static ScenarioState ToReadOnlyState(this Scenario model)
     {
-        return new CombatScenarioState(model.Name, model.AttackerBuilds.Select(x => x.ToReadOnlyState()).ToArray(), model.DefenderBuilds.Select(x => x.ToReadOnlyState()).ToArray());
+        return new ScenarioState(model.Name, model.AttackerBuilds.Select(x => x.ToReadOnlyState()).ToArray(), model.DefenderBuilds.Select(x => x.ToReadOnlyState()).ToArray());
     }
     
     public static void UpdateFromReadOnlyState(this DamageDice damageDice, DamageDiceState damageDiceState)

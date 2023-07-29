@@ -1,6 +1,7 @@
 ﻿@using d20TG.Features.Scenarios.Services
 @using d20TG.Features.Scenarios.Model
-@inject ICombatScenarioRepository ScenarioRepository
+@inject IScenarioRepository ScenarioRepository
+@inject IMyNavigationManager MyNavigation
 
 <div>
     @if (_scenarioIds != null && _scenarioIds.Length > 0)
@@ -13,6 +14,12 @@
                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline flex-grow">
                         @scenarioId.Name
                     </a>
+                    <button type="button"
+                            @onclick="@(() => HandleEditClick(scenarioId.Id))"
+                            class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+                        edit
+                        <span class="sr-only">Icon description</span>
+                    </button>
                     <button type="button"
                             @onclick="@(() => HandleDeleteClickAsync(scenarioId.Id))"
                             class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
@@ -35,13 +42,17 @@
 </div>
 
 @code {
-    private CombatScenarioId[]? _scenarioIds;
+    private ScenarioId[]? _scenarioIds;
 
     protected override async Task OnInitializedAsync()
     {
         await ReloadScenariosFromStorageAsync();
     }
 
+    private void HandleEditClick(string scenarioId)
+    {
+        MyNavigation.NavigateToScenario(scenarioId);
+    }
 
     private async Task HandleDeleteClickAsync(string scenarioId)
     {

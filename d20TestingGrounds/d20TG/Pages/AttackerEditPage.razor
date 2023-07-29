@@ -1,0 +1,53 @@
+﻿@attribute [Route(MyRoutes.ScenarioAttackerRoute)]
+@using d20TG.Features.Scenarios.Services
+@using d20TG.Features.Scenarios.State
+@using d20TG.Features.Scenarios.Utils
+@inject IScenarioRepository Repository
+@inject IScenarioService ScenarioService
+@inject IMyNavigationManager MyNavigation
+
+<AttackerBuildForm InitialState="_attackerBuildState" OnSave="HandleSaveAsync" OnCancel="HandleCancel" />
+
+@code {
+
+    [Parameter]
+    public string ScenarioId { get; set; } = null!;
+    [Parameter]
+    public string? AttackerBuildId { get; set; }
+
+    private AttackerBuildState? _attackerBuildState;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        var scenario = await Repository.LoadScenarioAsync(ScenarioId);
+        if (scenario == null)
+        {
+            throw new ArgumentException($"Scenario {ScenarioId} was not found");
+        }
+        if (AttackerBuildId != null)
+        {
+            var attackerBuild = await ScenarioService.FindAttackerBuildAsync(ScenarioId, AttackerBuildId);
+            _attackerBuildState = attackerBuild?.ToReadOnlyState();
+        }
+    }
+
+    private async Task HandleSaveAsync(AttackerBuildState attackerBuildState)
+    {
+        await Repository.AddOrUpdateAttackerBuildAsync(ScenarioId, attackerBuildState);
+        
+        MyNavigation.NavigateToScenario(ScenarioId);
+    }
+
+    private void HandleCancel()
+    {
+        if (string.IsNullOrWhiteSpace(ScenarioId))
+        {
+            MyNavigation.NavigateToHome();
+        }
+        else
+        {
+            MyNavigation.NavigateToScenario(ScenarioId);
+        }
+    }
+
+}

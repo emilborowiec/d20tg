@@ -7,16 +7,16 @@
         @foreach (var build in DefenderBuilds)
         {
             <div class="snap-center flex-shrink-0">
-                @if (build.Id == CombatScenario.FirstDefenderId)
+                @if (build.Id == Scenario.FirstDefenderId)
                 {
-                    <DefenderBuildInput State="@build"
-                                        OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChangeAsync"/>
+                    <DefenderBuildCard ScenarioId="@ScenarioId" 
+                                       DefenderBuild="@build" />
                 }
                 else
                 {
-                    <DefenderBuildInput State="@build"
-                                        OnDefenderBuildStateChangeCallback="HandleDefenderBuildStateChangeAsync"
-                                        OnDeleteClickCallback="OnDefenderDeleteClickCallback"/>
+                    <DefenderBuildCard ScenarioId="@ScenarioId" 
+                                       DefenderBuild="@build" 
+                                       OnDeleteClickCallback="@OnDefenderDeleteClickCallback"/>
                 }
             </div>
         }
@@ -34,21 +34,15 @@
 @code {
 
     [Parameter, EditorRequired]
-    public DefenderBuildState[]? DefenderBuilds { get; set; }
-
+    public string ScenarioId { get; set; } = null!;
+    
     [Parameter, EditorRequired]
-    public EventCallback<DefenderBuildState> OnDefenderBuildStateChangeCallback { get; set; }
+    public DefenderBuildState[]? DefenderBuilds { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback OnDefenderAddClickCallback { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<string> OnDefenderDeleteClickCallback { get; set; }
-
-    private async Task HandleDefenderBuildStateChangeAsync(DefenderBuildState defenderBuildState)
-    {
-        await OnDefenderBuildStateChangeCallback.InvokeAsync(defenderBuildState);
-    }
-
 }
 

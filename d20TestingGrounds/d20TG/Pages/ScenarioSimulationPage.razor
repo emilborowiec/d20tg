@@ -1,9 +1,9 @@
-﻿@using d20TG.Features.Scenarios.Services
+﻿@attribute [Route(MyRoutes.ScenarioSimulationRoute)]
+@using d20TG.Features.Scenarios.Services
 @using d20TG.Features.Scenarios.State
 @using d20TG.Features.Scenarios.Utils
 @using d20TG.Features.Simulations.Model
-@attribute [Route(MyRoutes.ScenarioSimulationRoute)]
-@inject ICombatScenarioRepository ScenarioRepository
+@inject IScenarioRepository ScenarioRepository
 
 <PageTitle>Simulation | d20 Testing Grounds</PageTitle>
 
@@ -51,7 +51,7 @@
 
     public int SampleSize { get; set; } = 20;
 
-    private CombatScenarioState? _scenarioState;
+    private ScenarioState? _scenarioState;
     private List<SimulationRun> _runs = new();
 
     protected override async Task OnParametersSetAsync()
@@ -62,7 +62,10 @@
         }
 
         var scenario = await ScenarioRepository.LoadScenarioAsync(ScenarioId);
-        Console.WriteLine($"Loaded scenario: {ScenarioId} {scenario}");
+        if (scenario == null)
+        {
+            return;
+        }
         _scenarioState = scenario.ToReadOnlyState();
 
         HandleRerunSampleClick(SampleSize);

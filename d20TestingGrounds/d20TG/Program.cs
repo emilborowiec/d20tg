@@ -11,7 +11,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddScoped<ICombatScenarioRepository, CombatScenarioRepository>();
+builder.Services.AddScoped<IScenarioRepository, ScenarioRepository>();
+builder.Services.AddScoped<IScenarioService, ScenarioService>();
 builder.Services.AddSingleton<IMyNavigationManager, MyNavigationManager>();
 
 builder.Services.AddBlazoredLocalStorage();

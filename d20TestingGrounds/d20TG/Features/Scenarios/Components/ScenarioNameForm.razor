@@ -1,0 +1,41 @@
+﻿<EditForm Model="_model" OnSubmit="HandleSubmitAsync">
+    <InputText @bind-Value="_model.Name"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"/>
+    <button type="submit"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row justify-center">
+        save
+    </button>
+    <button @onclick="@(async () => await OnCancel.InvokeAsync())"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row justify-center">
+        cancel
+    </button>
+</EditForm>
+
+@code {
+    private ScenarioNameFormModel _model = new();
+
+    [Parameter]
+    public string? InitialName { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _model.Name = InitialName ?? "New Scenario";
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        await OnSave.InvokeAsync(_model.Name);
+    }
+
+    public class ScenarioNameFormModel
+    {
+        public string Name { get; set; } = "New Scenario";
+    }
+
+}

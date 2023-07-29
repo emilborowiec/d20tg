@@ -1,0 +1,12 @@
+﻿@attribute [Route(MyRoutes.ScenarioRoute)]
+
+<PageTitle>Scenario | d20 Testing Grounds</PageTitle>
+
+<h2 class="text-4xl font-semibold mb-2">Combat Scenario</h2>
+
+<ScenarioEditView ScenarioId="@ScenarioId" />
+
+@code {
+    [Parameter]
+    public string ScenarioId { get; set; } = null!;
+}

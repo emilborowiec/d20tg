@@ -2,24 +2,23 @@
 
 namespace d20TG.Domain;
 
-public class DamageDice
+public class DamageDice : IValidatableObject
 {
-    private int _diceCount = 1;
     public DiceType DiceType { get; set; } = DiceType.D6;
     [Range(1, 100)]
-    public int DiceCount {
-        get => _diceCount;
-        set
-        {
-            if (value is > 0 and < 100)
-            {
-                _diceCount = value;
-            }
-        }
-    }
+    public int DiceCount { get; set; } = 1;
 
     public override string ToString()
     {
         return $"{DiceCount}d{(int)DiceType}";
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (!Enum.IsDefined<DiceType>(DiceType))
+        {
+            yield return new ValidationResult($"DamageDice integral value must be one of 4, 6, 8, 10, 12, 20, 100",
+                new[] { nameof(DiceType) });
+        }
     }
 }

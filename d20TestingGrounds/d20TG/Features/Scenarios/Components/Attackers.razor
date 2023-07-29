@@ -7,16 +7,16 @@
         @foreach (var build in AttackerBuilds)
         {
             <div class="snap-center flex-shrink-0">
-                @if (build.Id == CombatScenario.FirstAttackerId)
+                @if (build.Id == Scenario.FirstAttackerId)
                 {
-                    <AttackerBuildInput State="@build"
-                                        OnAttackerBuildChangeCallback="HandleAttackerBuildChangeAsync"/>
+                    <AttackerBuildCard ScenarioId="@ScenarioId" 
+                                       AttackerBuild="@build" />
                 }
                 else
                 {
-                    <AttackerBuildInput State="@build"
-                                        OnAttackerBuildChangeCallback="HandleAttackerBuildChangeAsync"
-                                        OnDeleteClickCallback="OnAttackerDeleteClickCallback"/>
+                    <AttackerBuildCard ScenarioId="@ScenarioId" 
+                                       AttackerBuild="@build" 
+                                       OnDeleteClickCallback="@OnAttackerDeleteClickCallback"/>
                 }
             </div>
         }
@@ -34,20 +34,15 @@
 @code {
 
     [Parameter, EditorRequired]
-    public AttackerBuildState[]? AttackerBuilds { get; set; }
-
+    public string ScenarioId { get; set; } = null!;
+    
     [Parameter, EditorRequired]
-    public EventCallback<AttackerBuildState> OnAttackerBuildStateChangeCallback { get; set; }
+    public AttackerBuildState[]? AttackerBuilds { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback OnAttackerAddClickCallback { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<string> OnAttackerDeleteClickCallback { get; set; }
-
-    private async Task HandleAttackerBuildChangeAsync(AttackerBuildState attackerBuildState)
-    {
-        await OnAttackerBuildStateChangeCallback.InvokeAsync(attackerBuildState);
-    }
 
 }

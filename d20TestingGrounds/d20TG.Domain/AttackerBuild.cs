@@ -10,7 +10,8 @@ public class AttackerBuild
     [Range(-100, 100)]
     public int DamageBonus { get; set; }
     [Required, JsonInclude]
-    public DamageDice DamageDice { get; private set; } = new();
+    [ValidateComplexType]
+    public DamageDice DamageDice { get; set; } = new();
 
     public override string ToString()
     {

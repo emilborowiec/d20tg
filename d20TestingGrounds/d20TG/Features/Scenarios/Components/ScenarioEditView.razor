@@ -1,0 +1,96 @@
+﻿@using d20TG.Features.Scenarios.Model
+@using d20TG.Features.Scenarios.Services
+@using d20TG.Features.Scenarios.Utils
+@using System.Diagnostics
+@inject IScenarioRepository ScenarioRepository
+
+@if (_model == null)
+{
+    <div>
+        <h2>Loading...</h2>
+    </div>
+}
+else
+{
+    <div>
+        <div class="mb-2">
+            @if (_editingName)
+            {
+                <ScenarioNameForm InitialName="@_model.Name" OnCancel="@(() => _editingName = false)" OnSave="@HandleScenarioNameSaveAsync"/>
+            }
+            else
+            {
+                <h2 class="text-4xl">@_model.Name</h2>
+                <button @onclick="(() => _editingName = true)">Edit</button>
+            }
+        </div>
+        <div class="mb-2 overflow-x-hidden">
+            <h3 class="text-3xl">Defenders</h3>
+            <Defenders ScenarioId="@_model.Id"
+                       DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates"
+                       OnDefenderAddClickCallback="HandleAddDefenderClickAsync"
+                       OnDefenderDeleteClickCallback="HandleDeleteDefenderClickAsync"/>
+        </div>
+        <div class="mb-2">
+            <h3 class="text-3xl">Attackers</h3>
+            <Attackers ScenarioId="@_model.Id"
+                       AttackerBuilds="@_model.ToReadOnlyState().AttackerBuildStates"
+                       OnAttackerAddClickCallback="HandleAddAttackerClickAsync"
+                       OnAttackerDeleteClickCallback="HandleDeleteAttackerClickAsync"/>
+        </div>
+
+    </div>
+}
+
+@code {
+    private Scenario? _model;
+    private bool _formInvalid = false;
+    private bool _editingName = false;
+
+    [Parameter, EditorRequired]
+    public string ScenarioId { get; set; } = null!;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var scenario = await ScenarioRepository.LoadScenarioAsync(ScenarioId);
+        _model = scenario ?? throw new ArgumentException($"Scenario {ScenarioId} was not found");
+    }
+
+    private async Task HandleAddAttackerClickAsync()
+    {
+        Debug.Assert(_model != null, nameof(_model) + " != null");
+        _model.AttackerBuilds.Add(new AttackerLabeledBuild(Guid.NewGuid().ToString()));
+        await ScenarioRepository.SaveScenarioAsync(_model);
+    }
+
+    private async Task HandleAddDefenderClickAsync()
+    {
+        Debug.Assert(_model != null, nameof(_model) + " != null");
+        _model.DefenderBuilds.Add(new DefenderLabeledBuild(Guid.NewGuid().ToString()));
+        await ScenarioRepository.SaveScenarioAsync(_model);
+    }
+
+    private async Task HandleDeleteAttackerClickAsync(string id)
+    {
+        Debug.Assert(_model != null, nameof(_model) + " != null");
+        _model.AttackerBuilds.Remove(_model.AttackerBuilds.First(x => x.Id == id));
+        await ScenarioRepository.SaveScenarioAsync(_model);
+    }
+
+    private async Task HandleDeleteDefenderClickAsync(string id)
+    {
+        Debug.Assert(_model != null, nameof(_model) + " != null");
+        _model.DefenderBuilds.Remove(_model.DefenderBuilds.First(x => x.Id == id));
+        await ScenarioRepository.SaveScenarioAsync(_model);
+    }
+
+    private async Task HandleScenarioNameSaveAsync(string newName)
+    {
+        Debug.Assert(_model != null, nameof(_model) + " != null");
+        _model.Name = newName;
+        _editingName = false;
+        await ScenarioRepository.SaveScenarioAsync(_model);
+    }
+
+}
+

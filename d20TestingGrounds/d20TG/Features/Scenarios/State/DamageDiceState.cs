@@ -2,4 +2,4 @@
 
 namespace d20TG.Features.Scenarios.State;
 
-public readonly record struct DamageDiceState(int DiceCount = 0, DiceType DiceType = DiceType.D6);
+public readonly record struct DamageDiceState(int DiceCount = 1, DiceType DiceType = DiceType.D6);
