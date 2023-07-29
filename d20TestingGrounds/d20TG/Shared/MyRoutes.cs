@@ -13,4 +13,9 @@ public static class MyRoutes
     public const string ScenarioIdParam = "{scenarioId}";
     public const string AttackerBuildIdParam = "{attackerBuildId}";
     public const string DefenderBuildIdParam = "{defenderBuildId}";
+
+    public static string GetScenarioSimulationRoute(string scenarioId)
+    {
+        return ScenarioSimulationRoute.Replace(MyRoutes.ScenarioIdParam, scenarioId);
+    }
 }
