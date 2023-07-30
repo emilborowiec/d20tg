@@ -1,5 +1,4 @@
 ﻿@attribute [Route(MyRoutes.NewScenarioRoute)]
-@using System.ComponentModel.DataAnnotations
 @using d20TG.Features.Scenarios.Model
 @using d20TG.Features.Scenarios.Services
 @inject IMyNavigationManager MyNavigation
@@ -29,12 +28,12 @@
 </EditForm>
 
 @code {
-    private NewScenarioFromModel _model = null!;
+    private ScenarioNameFormModel _model = null!;
     private EditContext? _editContext;
 
     protected override void OnInitialized()
     {
-        _model = new NewScenarioFromModel();
+        _model = new ScenarioNameFormModel();
         _editContext = new EditContext(_model);
     }
 
@@ -52,11 +51,4 @@
     {
         MyNavigation.NavigateToHome();
     }
-
-    public class NewScenarioFromModel
-    {
-        [MinLength(1), MaxLength(100)]
-        public string Name { get; set; } = string.Empty;
-    }
-
 }
