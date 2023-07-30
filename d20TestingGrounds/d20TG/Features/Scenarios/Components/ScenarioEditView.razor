@@ -20,8 +20,8 @@ else
             }
             else
             {
-                <div class="flex flex-row items-center">
-                    <h2 class="text-4xl">@_model.Name</h2>
+                <div class="flex flex-row items-center border-b">
+                    <h3 class="text-3xl grow">@_model.Name</h3>
                     <button type="button"
                             @onclick="@(() => _editingName = true)"
                             class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center rounded-lg ml-2">
@@ -33,18 +33,36 @@ else
                 </div>
             }
         </div>
-        <div class="mb-2 overflow-x-hidden">
-            <h3 class="text-3xl">Defenders</h3>
+        <div class="mb-2 overflow-x-hidden bg-green-300 p-4">
+            <div class="flex flex-row items-center">
+                <h4 class="text-2xl mb-2 grow">Defenders</h4>
+                <button @onclick="HandleAddDefenderClickAsync"
+                        class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center">
+                    <i>
+                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5.757v8.486M5.757 10h8.486M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                    </i>
+                </button>
+            </div>
             <Defenders ScenarioId="@_model.Id"
                        DefenderBuilds="@_model.ToReadOnlyState().DefenderBuildStates"
-                       OnDefenderAddClickCallback="HandleAddDefenderClickAsync"
                        OnDefenderDeleteClickCallback="HandleDeleteDefenderClickAsync"/>
         </div>
-        <div class="mb-2">
-            <h3 class="text-3xl">Attackers</h3>
+        <div class="mb-2 overflow-x-hidden bg-red-300 p-4">
+            <div class="flex flex-row items-center">
+                <h4 class="text-2xl mb-2 grow">Attackers</h4>
+                <button @onclick="HandleAddAttackerClickAsync"
+                        class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center">
+                    <i>
+                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 5.757v8.486M5.757 10h8.486M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                    </i>
+                </button>
+            </div>
             <Attackers ScenarioId="@_model.Id"
                        AttackerBuilds="@_model.ToReadOnlyState().AttackerBuildStates"
-                       OnAttackerAddClickCallback="HandleAddAttackerClickAsync"
                        OnAttackerDeleteClickCallback="HandleDeleteAttackerClickAsync"/>
         </div>
 
@@ -102,4 +120,3 @@ else
     }
 
 }
-

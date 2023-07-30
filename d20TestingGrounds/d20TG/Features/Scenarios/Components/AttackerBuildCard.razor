@@ -4,18 +4,42 @@
 @inject IMyNavigationManager MyNavigation
 
 <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-    <div class="grid gap-6 mb-6 md:grid-cols-1">
-        <p class="border" style="border-color: @AttackerBuild.ColorHex">@AttackerBuild.Label</p>
-        <h6 class="text-lg">Attack Bonus</h6>
-        <p>@AttackerBuild.AttackBonus</p>
-        <h6 class="text-lg">Damage Bonus</h6>
-        <p>@AttackerBuild.DamageBonus</p>
-        <h6 class="text-lg">Damage Dice</h6>
-        <p>@AttackerBuild.DamageDiceState.ToString()</p>
+    <div class="mb-1">
+        <span>
+            <svg class="w-6 h-6 text-gray-800 inline"
+                 style="color: @AttackerBuild.ColorHex"
+                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 18">
+                <path d="M7 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm2 1H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+            </svg>
+            @AttackerBuild.Label
+        </span>
+    </div>
+    <div class="grid gap-1 mb-1 md:grid-cols-2">
+        <div>
+            <h6 class="text-sm text-gray-500">Attack Bonus</h6>
+            <p class="text-5xl font-semibold">@AttackerBuild.AttackBonus</p>
+        </div>
+        <div>
+            <h6 class="text-sm text-gray-500">Damage Bonus</h6>
+            <p class="text-5xl font-semibold">@AttackerBuild.DamageBonus</p>
+        </div>
+        <div>
+            <h6 class="text-sm text-gray-500">Damage Dice</h6>
+            <p class="text-5xl font-semibold">@($"{AttackerBuild.DamageDiceState.DiceCount}{AttackerBuild.DamageDiceState.DiceType}")</p>
+        </div>
+    </div>
+    <div class="flex flex-row-reverse">
+        <button @onclick="HandleEditClick"
+                class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm p-2.5 text-center inline-flex items-center rounded-lg ml-2">
+            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.418 17.861 1 20l2.139-6.418m4.279 4.279 10.7-10.7a3.027 3.027 0 0 0-2.14-5.165c-.802 0-1.571.319-2.139.886l-10.7 10.7m4.279 4.279-4.279-4.279m2.139 2.14 7.844-7.844m-1.426-2.853 4.279 4.279"/>
+            </svg>
+            <span class="sr-only">Edit icon</span>
+        </button>
         @if (OnDeleteClickCallback.HasDelegate)
         {
             <button @onclick="@(async () => await OnDeleteClickCallback.InvokeAsync(AttackerBuild.Id))"
-                    class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row justify-center">
+                    class="text-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm p-2.5 text-center inline-flex items-center rounded-lg">
                 <i>
                     <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
@@ -24,10 +48,6 @@
             </button>
         }
     </div>
-    <button @onclick="HandleEditClick"
-            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 flex flex-row justify-center">
-        Edit
-    </button>
 </div>
 
 @code {
