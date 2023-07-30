@@ -10,7 +10,7 @@ public class SimulationRun
     public int Id { get; }
     public List<CombatRound> Rounds { get; } = new();
 
-    public int TotalDamage => Rounds.Sum(x => x.Turns.Sum(t => t.DamageDelt));
+    public int TotalDamage => Rounds.Sum(x => x.Turns.Sum(t => t.DamageDealt));
     public decimal DamagePerRound => (decimal)TotalDamage / Rounds.Count;
 
     public decimal Accurracy

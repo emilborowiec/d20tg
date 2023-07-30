@@ -23,5 +23,5 @@ public class CombatTurn
 
     public bool IsHit => CombatSystem.IsHit(Defender.Build.ArmorClass, Attacker.Build.AttackBonus, AttackRoll);
 
-    public int DamageDelt => DamageRolls == null ? 0 : (DamageRolls.Sum() + Attacker.Build.DamageBonus);
+    public int DamageDealt => DamageRolls == null ? 0 : (DamageRolls.Sum() + Attacker.Build.DamageBonus);
 }
