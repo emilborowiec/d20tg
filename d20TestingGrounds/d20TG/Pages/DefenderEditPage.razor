@@ -6,6 +6,10 @@
 @inject IScenarioService ScenarioService
 @inject IMyNavigationManager MyNavigation
 
+<PageTitle>Defender | d20 Testing Grounds</PageTitle>
+
+<h2 class="text-4xl font-semibold mb-4">Defender</h2>
+
 <DefenderBuildForm InitialState="_defenderBuildState" OnSave="HandleSaveAsync" OnCancel="HandleCancel" />
 
 @code {

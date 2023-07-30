@@ -39,7 +39,7 @@ public class MyNavigationManager : IMyNavigationManager
 
     public void NavigateToDefender(string scenarioId, string defenderId)
     {
-        _navigation.NavigateTo(MyRoutes.ScenarioAttackerRoute.Replace(MyRoutes.ScenarioIdParam, scenarioId)
+        _navigation.NavigateTo(MyRoutes.ScenarioDefenderRoute.Replace(MyRoutes.ScenarioIdParam, scenarioId)
             .Replace(MyRoutes.DefenderBuildIdParam, defenderId));
     }
 

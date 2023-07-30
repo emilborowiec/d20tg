@@ -3,8 +3,8 @@
 @using d20TG.Features.Scenarios.Utils
 @inject IMyNavigationManager MyNavigation
 
-<div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-    <div class="mb-1">
+<div class="max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div class="mb-2">
         <span>
             <svg class="w-6 h-6 text-gray-800 inline"
                  style="color: @AttackerBuild.ColorHex"
@@ -14,7 +14,7 @@
             @AttackerBuild.Label
         </span>
     </div>
-    <div class="grid gap-1 mb-1 md:grid-cols-2">
+    <div class="grid gap-1 mb-2 md:grid-cols-2">
         <div>
             <h6 class="text-sm text-gray-500">Attack Bonus</h6>
             <p class="text-5xl font-semibold">@AttackerBuild.AttackBonus</p>
