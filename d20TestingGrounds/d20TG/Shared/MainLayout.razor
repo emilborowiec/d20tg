@@ -1,8 +1,9 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
 
 <div>
     <nav class="bg-gradient-to-r from-green-800 to-blue-800 text-white font-display text-3xl p-4">
-        <a href="/">d20 Testing Grounds</a>
+        <a href="/@Navigation.BaseUri">d20 Testing Grounds</a>
     </nav>
     <div class="container mx-auto bg-white p-8">
         @Body
