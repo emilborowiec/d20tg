@@ -13,7 +13,7 @@ public class MyNavigationManager : IMyNavigationManager
 
     public void NavigateToHome()
     {
-        _navigation.NavigateTo("/");
+        _navigation.NavigateTo(_navigation.BaseUri);
     }
 
     public void NavigateToScenario(string scenarioId)
